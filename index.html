@@ -159,7 +159,7 @@
     .el-grid figure{margin:0}
     .el-grid button{display:block;width:100%;padding:clamp(14px,2vw,26px);background:var(--paper);border:1px solid var(--rule);cursor:zoom-in}
     .el-grid button:focus-visible{outline:2px solid var(--bronze);outline-offset:3px}
-    .el-grid img{display:block;width:100%;aspect-ratio:2/1;object-fit:contain;mix-blend-mode:multiply}
+    .el-grid img{display:block;width:100%;height:auto;aspect-ratio:2/1;object-fit:contain;mix-blend-mode:multiply}
     .el-grid figcaption{display:flex;justify-content:space-between;padding-top:14px;font-size:12px;color:var(--muted)}
     .disclosure{margin-top:clamp(48px,6vw,80px);max-width:78ch;font-size:12px;line-height:1.8;color:var(--muted)}
     /* lightbox */
@@ -240,7 +240,7 @@
   <div class="stage">
     <div class="paper-pattern"></div>
     <div class="drawing-stage" id="drawingStage">
-      <img class="illustration" src="assets/front_elevation.jpg" alt="Original front architectural elevation for 310 Meadowcrest, November 20, 2025" loading="lazy">
+      <img width="2300" height="1124" class="illustration" src="assets/front_elevation.jpg" alt="Original front architectural elevation for 310 Meadowcrest, November 20, 2025" loading="lazy">
       <div class="drawing-footer">Original architectural elevation <span style="padding:0 14px">/</span> November 20, 2025</div>
     </div>
     <div class="model-stage" id="modelStage" aria-label="A 120-frame conceptual massing model rotating 360 degrees">
@@ -335,8 +335,8 @@
         <p>Early reference images for the look of the home. Final materials and finishes have not been selected.</p>
       </div>
       <div class="dd-grid">
-        <figure class="a"><img src="assets/inspiration-exterior.webp" srcset="assets/inspiration-exterior-900.webp 900w, assets/inspiration-exterior.webp 1448w" sizes="(max-width: 900px) 100vw, 60vw" alt="Exterior inspiration: a white brick traditional home beneath mature trees" loading="lazy"><figcaption><span>Exterior</span><span>Inspiration</span></figcaption></figure>
-        <figure class="b"><img src="assets/inspiration-kitchen.webp" srcset="assets/inspiration-kitchen-700.webp 700w, assets/inspiration-kitchen.webp 1122w" sizes="(max-width: 900px) 100vw, 38vw" alt="Kitchen inspiration: arched range alcove, stone backsplash and wood cabinetry" loading="lazy"><figcaption><span>Kitchen</span><span>Inspiration</span></figcaption></figure>
+        <figure class="a"><img width="1448" height="902" src="assets/inspiration-exterior.webp" srcset="assets/inspiration-exterior-900.webp 900w, assets/inspiration-exterior.webp 1448w" sizes="(max-width: 900px) 100vw, 60vw" alt="Exterior inspiration: a white brick traditional home beneath mature trees" loading="lazy"><figcaption><span>Exterior</span><span>Inspiration</span></figcaption></figure>
+        <figure class="b"><img width="1122" height="1255" src="assets/inspiration-kitchen.webp" srcset="assets/inspiration-kitchen-700.webp 700w, assets/inspiration-kitchen.webp 1122w" sizes="(max-width: 900px) 100vw, 38vw" alt="Kitchen inspiration: arched range alcove, stone backsplash and wood cabinetry" loading="lazy"><figcaption><span>Kitchen</span><span>Inspiration</span></figcaption></figure>
       </div>
     </div>
   </section>
@@ -353,7 +353,7 @@
       </div>
       <div class="pl-panel" id="panel-1" role="tabpanel" aria-labelledby="tab-1">
         <div class="pl-grid">
-          <div><div class="pl-sheet" data-full="assets/first_plan.webp"><img src="assets/first_plan.webp" srcset="assets/first_plan-1000.webp 1000w, assets/first_plan.webp 1600w" sizes="(max-width: 900px) 100vw, 60vw" alt="First floor plan" loading="lazy"></div><div class="pl-cap"><span>First floor plan</span><span>Tap to enlarge</span></div></div>
+          <div><div class="pl-sheet" data-full="assets/first_plan.webp"><img width="1425" height="1600" src="assets/first_plan.webp" srcset="assets/first_plan-1000.webp 1000w, assets/first_plan.webp 1600w" sizes="(max-width: 900px) 100vw, 60vw" alt="First floor plan" loading="lazy"></div><div class="pl-cap"><span>First floor plan</span><span>Tap to enlarge</span></div></div>
           <ul class="rooms" aria-label="First floor rooms and ceiling heights">
             <li><span>Two-story foyer</span><span>20′6″ ceiling</span></li>
             <li><span>Study</span><span>10′</span></li>
@@ -371,7 +371,7 @@
       </div>
       <div class="pl-panel" id="panel-2" role="tabpanel" aria-labelledby="tab-2" hidden>
         <div class="pl-grid">
-          <div><div class="pl-sheet" data-full="assets/second_plan.webp"><img src="assets/second_plan.webp" srcset="assets/second_plan-1000.webp 1000w, assets/second_plan.webp 1600w" sizes="(max-width: 900px) 100vw, 60vw" alt="Second floor plan" loading="lazy"></div><div class="pl-cap"><span>Second floor plan</span><span>Tap to enlarge</span></div></div>
+          <div><div class="pl-sheet" data-full="assets/second_plan.webp"><img width="1425" height="1600" src="assets/second_plan.webp" srcset="assets/second_plan-1000.webp 1000w, assets/second_plan.webp 1600w" sizes="(max-width: 900px) 100vw, 60vw" alt="Second floor plan" loading="lazy"></div><div class="pl-cap"><span>Second floor plan</span><span>Tap to enlarge</span></div></div>
           <ul class="rooms" aria-label="Second floor rooms and ceiling heights">
             <li><span>Play room</span><span>Box ceiling to 10′</span></li>
             <li><span>Media room / Bedroom 6</span><span>Sloped to 10′</span></li>
@@ -391,8 +391,8 @@
     <div class="wrap">
       <div class="label">Elevations</div><h2 class="h2" id="el-title">Front and rear elevations.</h2>
       <div class="el-grid">
-        <figure><button type="button" data-full="assets/front_elevation.jpg" aria-label="Enlarge front elevation"><img src="assets/front_elevation.jpg" srcset="assets/front_elevation-1200.webp 1200w, assets/front_elevation.jpg 2300w" sizes="(max-width: 900px) 100vw, 50vw" alt="Front elevation" loading="lazy"></button><figcaption><span>Front elevation</span><span>Nov 2025</span></figcaption></figure>
-        <figure><button type="button" data-full="assets/rear_elevation.jpg" aria-label="Enlarge rear elevation"><img src="assets/rear_elevation.jpg" srcset="assets/rear_elevation-1200.webp 1200w, assets/rear_elevation.jpg 2300w" sizes="(max-width: 900px) 100vw, 50vw" alt="Rear elevation" loading="lazy"></button><figcaption><span>Rear elevation</span><span>Nov 2025</span></figcaption></figure>
+        <figure><button type="button" data-full="assets/front_elevation.jpg" aria-label="Enlarge front elevation"><img width="2300" height="1124" src="assets/front_elevation.jpg" srcset="assets/front_elevation-1200.webp 1200w, assets/front_elevation.jpg 2300w" sizes="(max-width: 900px) 100vw, 50vw" alt="Front elevation" loading="lazy"></button><figcaption><span>Front elevation</span><span>Nov 2025</span></figcaption></figure>
+        <figure><button type="button" data-full="assets/rear_elevation.jpg" aria-label="Enlarge rear elevation"><img width="2300" height="1097" src="assets/rear_elevation.jpg" srcset="assets/rear_elevation-1200.webp 1200w, assets/rear_elevation.jpg 2300w" sizes="(max-width: 900px) 100vw, 50vw" alt="Rear elevation" loading="lazy"></button><figcaption><span>Rear elevation</span><span>Nov 2025</span></figcaption></figure>
       </div>
       <p class="disclosure">The rotating model is a conceptual massing study, not a surveyed or construction-ready model. Front and rear are based on the elevation drawings. Side roof geometry and other unseen details are estimated. Square footages are taken from the plans. Final construction, materials and finishes may differ.</p>
       <div class="call"><span class="call-label">For more information, call</span><a href="tel:+18179094709" aria-label="Call (817) 909-4709"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>(817) 909-4709</a></div>
@@ -407,7 +407,7 @@
   <h2>The house in 3D.</h2>
   <p class="lede"><span class="hint-mouse">Drag sideways</span><span class="hint-touch">Swipe sideways</span> to walk around the house.</p>
   <div class="m-viewer" id="mViewer">
-    <img class="m-poster" id="mPoster" src="assets/mobile/intro-mobile-poster.jpg" alt="" aria-hidden="true" loading="lazy">
+    <img width="1080" height="780" class="m-poster" id="mPoster" src="assets/mobile/intro-mobile-poster.jpg" alt="" aria-hidden="true" loading="lazy">
   </div>
   <div class="m-hint" id="mHint"><svg viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1"><path d="M1 6h20M5 2 1 6l4 4M17 2l4 4-4 4"/></svg><span><span class="hint-mouse">Drag to rotate</span><span class="hint-touch">Swipe to rotate</span></span></div>
 </section>
@@ -515,6 +515,30 @@
     const io=new IntersectionObserver(([e])=>{ if(e.isIntersecting){ io.disconnect(); start().catch(err=>console.warn('3D viewer failed',err)); } },{rootMargin:'600px 0px'});
     io.observe(host);
   })();
+</script>
+<script>
+/* in-page links: re-aim after the smooth scroll in case anything above the target grew while scrolling */
+(function(){
+  function settle(el,tries){
+    let done=false;
+    const check=()=>{ if(done) return; done=true;
+      const off=el.getBoundingClientRect().top - (parseFloat(getComputedStyle(el).scrollMarginTop)||0);
+      if(Math.abs(off)>4 && tries>0){ scrollBy({top:off,behavior:'smooth'}); settle(el,tries-1); }
+    };
+    addEventListener('scrollend',check,{once:true});
+    setTimeout(check,1400);
+  }
+  document.addEventListener('click',e=>{
+    const a=e.target.closest('a[href^="#"]'); if(!a) return;
+    const id=a.getAttribute('href').slice(1); if(!id) return;
+    const el=document.getElementById(id); if(!el || document.documentElement.classList.contains('locked')) return;
+    e.preventDefault();
+    el.querySelectorAll('img[loading="lazy"]').forEach(i=>i.loading='eager');
+    el.scrollIntoView({behavior:'smooth',block:'start'});
+    history.pushState(null,'','#'+id);
+    settle(el,3);
+  });
+})();
 </script>
 </body>
 </html>
