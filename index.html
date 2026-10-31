@@ -229,6 +229,24 @@
       .m-loc{display:inline-block;pointer-events:auto;margin-left:auto;font:500 9.5px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink);white-space:nowrap;padding:8px 2px}
       .m-3d{white-space:nowrap;padding:7px 10px 7px 9px;letter-spacing:.12em;font-size:9.5px;flex-shrink:0}
     }
+    /* pets: a separate animated layer over the front view only */
+    .pets{pointer-events:none;opacity:0;transition:opacity .5s ease}
+    .pets.show{opacity:1}
+    .vid-wrap{display:none}
+    .pets svg{display:block}
+    .dog-tail{transform-origin:575px 760px;animation:wag .42s ease-in-out infinite alternate}
+    @keyframes wag{from{transform:rotate(-20deg)}to{transform:rotate(22deg)}}
+    .dog-head{transform-origin:561px 748px;animation:tilt 4.2s ease-in-out infinite}
+    @keyframes tilt{0%,62%,100%{transform:rotate(0)}70%,86%{transform:rotate(-9deg)}}
+    .cat-tail{transform-origin:1036px 637px;animation:flick 2.6s ease-in-out infinite}
+    @keyframes flick{0%,100%{transform:rotate(0)}40%{transform:rotate(-24deg)}55%{transform:rotate(-6deg)}70%{transform:rotate(-18deg)}}
+    @media(max-width:800px){
+      .vid-wrap{display:block;position:relative;width:112vw;margin:0 -6vw}
+      .m-intro .vid-wrap video{width:100%;margin:0}
+      .pets-mob{position:absolute;inset:0;width:100%;height:100%}
+      .m-intro.done .pets-mob{opacity:1}
+    }
+    @media(prefers-reduced-motion:reduce){.dog-tail,.dog-head,.cat-tail{animation:none}}
     @media(prefers-reduced-motion:reduce){.dd-grid img{transition:none}}
   </style>
 </head>
@@ -245,6 +263,59 @@
     </div>
     <div class="model-stage" id="modelStage" aria-label="A 120-frame conceptual massing model rotating 360 degrees">
       <img class="spin-image" id="frameA" src="assets/frames/frame-000.webp" alt="Conceptual three-dimensional massing model of 310 Meadowcrest" decoding="sync">
+      <svg class="spin-image pets pets-desk show" id="petsDesk" viewBox="0 0 1600 1040" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs>
+  <clipPath id="petsWinD"><rect x="525" y="650" width="72" height="119"/></clipPath>
+</defs>
+<!-- dog behind the Bed 2 window (left), looking out, tail wagging -->
+<g class="pet-dog" clip-path="url(#petsWinD)" stroke-linejoin="round" stroke-linecap="round">
+  <!-- fluffy white plume tail -->
+  <g class="dog-tail"><path d="M575 760 C583 749 585 738 581 727" fill="none" stroke="#3a3936" stroke-width="8.5"/><path d="M575 760 C583 749 585 738 581 727" fill="none" stroke="#f6f3ee" stroke-width="6.5"/>
+    <circle cx="581" cy="726" r="4.6" fill="#f6f3ee" stroke="#3a3936" stroke-width="1"/></g>
+  <!-- shoulders / chest -->
+  <g stroke="#3a3936" stroke-width="1.4">
+    <path d="M539 769 C537 751 546 742 561 742 C576 742 585 751 583 769 Z" fill="#f6f3ee"/>
+    <path d="M550 769 C549 756 554 749 561 749 C568 749 573 756 572 769 Z" fill="#f6f3ee"/>
+  </g>
+  <!-- red bandana -->
+  <g stroke="#3a3936" stroke-width="1.2" stroke-linejoin="round">
+    <path d="M546 744.5 Q561 750.5 576 744.5 L573.5 749.5 L561 761.5 L548.5 749.5 Z" fill="#c8372d"/>
+    <path d="M550 748.5 Q561 753 572 748.5" fill="none" stroke="#9e2a22" stroke-width="0.9"/>
+    <circle cx="556" cy="752" r="0.9" fill="#f6f3ee" stroke="none"/><circle cx="566" cy="752" r="0.9" fill="#f6f3ee" stroke="none"/><circle cx="561" cy="756.5" r="0.9" fill="#f6f3ee" stroke="none"/>
+  </g>
+  <g class="dog-head">
+    <!-- curly ears -->
+    <g stroke="#3a3936" stroke-width="1.2"><circle cx="549.0" cy="738.0" r="5.2" fill="#f6f3ee"/><circle cx="546.7" cy="742.7" r="5.2" fill="#f6f3ee"/><circle cx="541.7" cy="743.8" r="5.2" fill="#f6f3ee"/><circle cx="537.6" cy="740.6" r="5.2" fill="#f6f3ee"/><circle cx="537.6" cy="735.4" r="5.2" fill="#f6f3ee"/><circle cx="541.7" cy="732.2" r="5.2" fill="#f6f3ee"/><circle cx="546.7" cy="733.3" r="5.2" fill="#f6f3ee"/><circle cx="585.0" cy="738.0" r="5.2" fill="#f6f3ee"/><circle cx="582.7" cy="742.7" r="5.2" fill="#f6f3ee"/><circle cx="577.7" cy="743.8" r="5.2" fill="#f6f3ee"/><circle cx="573.6" cy="740.6" r="5.2" fill="#f6f3ee"/><circle cx="573.6" cy="735.4" r="5.2" fill="#f6f3ee"/><circle cx="577.7" cy="732.2" r="5.2" fill="#f6f3ee"/><circle cx="582.7" cy="733.3" r="5.2" fill="#f6f3ee"/></g>
+    <!-- fluffy white head -->
+    <g stroke="#3a3936" stroke-width="1.3"><circle cx="575.0" cy="731.0" r="5.4" fill="#f6f3ee"/><circle cx="573.1" cy="738.0" r="5.4" fill="#f6f3ee"/><circle cx="568.0" cy="743.1" r="5.4" fill="#f6f3ee"/><circle cx="561.0" cy="745.0" r="5.4" fill="#f6f3ee"/><circle cx="554.0" cy="743.1" r="5.4" fill="#f6f3ee"/><circle cx="548.9" cy="738.0" r="5.4" fill="#f6f3ee"/><circle cx="547.0" cy="731.0" r="5.4" fill="#f6f3ee"/><circle cx="548.9" cy="724.0" r="5.4" fill="#f6f3ee"/><circle cx="554.0" cy="718.9" r="5.4" fill="#f6f3ee"/><circle cx="561.0" cy="717.0" r="5.4" fill="#f6f3ee"/><circle cx="568.0" cy="718.9" r="5.4" fill="#f6f3ee"/><circle cx="573.1" cy="724.0" r="5.4" fill="#f6f3ee"/></g>
+    <circle cx="561" cy="731" r="14.5" fill="#f6f3ee"/>
+    <!-- black eyebrow over his right eye, shaggy fringe -->
+    <path d="M551.2 724.6 Q555.4 721.4 559.6 724.2" fill="none" stroke="#1f1e22" stroke-width="2.4"/>
+        <path d="M550 720 q4 -5 8 -1 q4 -5 8 -1 q4 -4 7 1" fill="none" stroke="#d8d1c6" stroke-width="1.1"/>
+    <circle class="dog-eye" cx="555.5" cy="728.5" r="1.9" fill="#1f1e22"/>
+    <circle class="dog-eye" cx="567" cy="728.5" r="1.9" fill="#1f1e22"/>
+    <!-- muzzle -->
+    <ellipse cx="561" cy="738.5" rx="8" ry="5.6" fill="#fbf9f4" stroke="#cfc8bc" stroke-width="0.9"/>
+    <ellipse cx="561" cy="735.6" rx="3.1" ry="2.3" fill="#1f1e22"/>
+    <path d="M558 740.5 Q561 743.5 564 740.5" fill="none" stroke="#3a3936" stroke-width="1.1"/>
+  </g>
+  <!-- fluffy white paws on the sill -->
+  <g stroke="#3a3936" stroke-width="1.2"><circle cx="553.6" cy="765.0" r="3" fill="#f6f3ee"/><circle cx="551.8" cy="767.5" r="3" fill="#f6f3ee"/><circle cx="548.9" cy="766.5" r="3" fill="#f6f3ee"/><circle cx="548.9" cy="763.5" r="3" fill="#f6f3ee"/><circle cx="551.8" cy="762.5" r="3" fill="#f6f3ee"/><circle cx="573.6" cy="765.0" r="3" fill="#f6f3ee"/><circle cx="571.8" cy="767.5" r="3" fill="#f6f3ee"/><circle cx="568.9" cy="766.5" r="3" fill="#f6f3ee"/><circle cx="568.9" cy="763.5" r="3" fill="#f6f3ee"/><circle cx="571.8" cy="762.5" r="3" fill="#f6f3ee"/></g>
+</g>
+<!-- cat lying on the roof above the study (right) -->
+<g class="pet-cat" stroke="#3a3936" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round">
+  <g class="cat-tail"><path d="M1036 637 C1048 638 1054 646 1050 654" fill="none" stroke-width="4" stroke="#3a3936"/><path d="M1036 637 C1048 638 1054 646 1050 654" fill="none" stroke-width="2.2" stroke="#d6d2cb"/></g>
+  <path d="M992 640 C992 626 1004 620 1018 620 C1032 620 1040 628 1040 640 Z" fill="#d6d2cb"/>
+  <path d="M1006 626 q3 -4 6 0 M1016 623 q3 -4 6 0 M1026 625 q3 -4 6 0" fill="none" stroke="#a8a39b" stroke-width="1.1"/>
+  <g class="cat-head">
+    <path d="M985 618 L988 606 L995 613 Z" fill="#d6d2cb"/>
+    <path d="M1003 613 L1009 606 L1010 618 Z" fill="#d6d2cb"/>
+    <ellipse cx="998" cy="624" rx="12" ry="10" fill="#d6d2cb"/>
+    <g class="cat-eyes" fill="none" stroke-width="1.2"><path d="M992 623 q2.5 2 5 0"/><path d="M1000 623 q2.5 2 5 0"/></g>
+    <path d="M997.5 627.5 l1 1 l1 -1" fill="none" stroke-width="1"/>
+  </g>
+  <rect x="994" y="636" width="9" height="5" rx="2.5" fill="#e4e0d9"/>
+</g>
+</svg>
     </div>
     <div id="disclaimer" class="disclaimer">Conceptual rendering</div>
     <div class="info-fade" id="infoFade"><h1>Drawn to life.</h1><p>A home in the making</p></div>
@@ -256,9 +327,64 @@
 <!-- MOBILE: one-shot animation on dark -->
 <section class="m-intro" id="mIntro" aria-label="Conceptual massing model of the home">
   <div class="m-chip">Conceptual rendering</div>
-  <video id="mVideo" muted playsinline preload="none" poster="assets/mobile/intro-mobile-poster.jpg" aria-label="The conceptual massing model turns one full rotation">
+  <div class="vid-wrap">
+    <video id="mVideo" muted playsinline preload="none" poster="assets/mobile/intro-mobile-poster.jpg" aria-label="The conceptual massing model turns one full rotation">
     <source data-src="assets/mobile/intro-mobile.mp4" type="video/mp4">
   </video>
+    <svg class="pets pets-mob" viewBox="80 0 1440 1040" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs>
+  <clipPath id="petsWinM"><rect x="525" y="650" width="72" height="119"/></clipPath>
+</defs>
+<!-- dog behind the Bed 2 window (left), looking out, tail wagging -->
+<g class="pet-dog" clip-path="url(#petsWinM)" stroke-linejoin="round" stroke-linecap="round">
+  <!-- fluffy white plume tail -->
+  <g class="dog-tail"><path d="M575 760 C583 749 585 738 581 727" fill="none" stroke="#3a3936" stroke-width="8.5"/><path d="M575 760 C583 749 585 738 581 727" fill="none" stroke="#f6f3ee" stroke-width="6.5"/>
+    <circle cx="581" cy="726" r="4.6" fill="#f6f3ee" stroke="#3a3936" stroke-width="1"/></g>
+  <!-- shoulders / chest -->
+  <g stroke="#3a3936" stroke-width="1.4">
+    <path d="M539 769 C537 751 546 742 561 742 C576 742 585 751 583 769 Z" fill="#f6f3ee"/>
+    <path d="M550 769 C549 756 554 749 561 749 C568 749 573 756 572 769 Z" fill="#f6f3ee"/>
+  </g>
+  <!-- red bandana -->
+  <g stroke="#3a3936" stroke-width="1.2" stroke-linejoin="round">
+    <path d="M546 744.5 Q561 750.5 576 744.5 L573.5 749.5 L561 761.5 L548.5 749.5 Z" fill="#c8372d"/>
+    <path d="M550 748.5 Q561 753 572 748.5" fill="none" stroke="#9e2a22" stroke-width="0.9"/>
+    <circle cx="556" cy="752" r="0.9" fill="#f6f3ee" stroke="none"/><circle cx="566" cy="752" r="0.9" fill="#f6f3ee" stroke="none"/><circle cx="561" cy="756.5" r="0.9" fill="#f6f3ee" stroke="none"/>
+  </g>
+  <g class="dog-head">
+    <!-- curly ears -->
+    <g stroke="#3a3936" stroke-width="1.2"><circle cx="549.0" cy="738.0" r="5.2" fill="#f6f3ee"/><circle cx="546.7" cy="742.7" r="5.2" fill="#f6f3ee"/><circle cx="541.7" cy="743.8" r="5.2" fill="#f6f3ee"/><circle cx="537.6" cy="740.6" r="5.2" fill="#f6f3ee"/><circle cx="537.6" cy="735.4" r="5.2" fill="#f6f3ee"/><circle cx="541.7" cy="732.2" r="5.2" fill="#f6f3ee"/><circle cx="546.7" cy="733.3" r="5.2" fill="#f6f3ee"/><circle cx="585.0" cy="738.0" r="5.2" fill="#f6f3ee"/><circle cx="582.7" cy="742.7" r="5.2" fill="#f6f3ee"/><circle cx="577.7" cy="743.8" r="5.2" fill="#f6f3ee"/><circle cx="573.6" cy="740.6" r="5.2" fill="#f6f3ee"/><circle cx="573.6" cy="735.4" r="5.2" fill="#f6f3ee"/><circle cx="577.7" cy="732.2" r="5.2" fill="#f6f3ee"/><circle cx="582.7" cy="733.3" r="5.2" fill="#f6f3ee"/></g>
+    <!-- fluffy white head -->
+    <g stroke="#3a3936" stroke-width="1.3"><circle cx="575.0" cy="731.0" r="5.4" fill="#f6f3ee"/><circle cx="573.1" cy="738.0" r="5.4" fill="#f6f3ee"/><circle cx="568.0" cy="743.1" r="5.4" fill="#f6f3ee"/><circle cx="561.0" cy="745.0" r="5.4" fill="#f6f3ee"/><circle cx="554.0" cy="743.1" r="5.4" fill="#f6f3ee"/><circle cx="548.9" cy="738.0" r="5.4" fill="#f6f3ee"/><circle cx="547.0" cy="731.0" r="5.4" fill="#f6f3ee"/><circle cx="548.9" cy="724.0" r="5.4" fill="#f6f3ee"/><circle cx="554.0" cy="718.9" r="5.4" fill="#f6f3ee"/><circle cx="561.0" cy="717.0" r="5.4" fill="#f6f3ee"/><circle cx="568.0" cy="718.9" r="5.4" fill="#f6f3ee"/><circle cx="573.1" cy="724.0" r="5.4" fill="#f6f3ee"/></g>
+    <circle cx="561" cy="731" r="14.5" fill="#f6f3ee"/>
+    <!-- black eyebrow over his right eye, shaggy fringe -->
+    <path d="M551.2 724.6 Q555.4 721.4 559.6 724.2" fill="none" stroke="#1f1e22" stroke-width="2.4"/>
+        <path d="M550 720 q4 -5 8 -1 q4 -5 8 -1 q4 -4 7 1" fill="none" stroke="#d8d1c6" stroke-width="1.1"/>
+    <circle class="dog-eye" cx="555.5" cy="728.5" r="1.9" fill="#1f1e22"/>
+    <circle class="dog-eye" cx="567" cy="728.5" r="1.9" fill="#1f1e22"/>
+    <!-- muzzle -->
+    <ellipse cx="561" cy="738.5" rx="8" ry="5.6" fill="#fbf9f4" stroke="#cfc8bc" stroke-width="0.9"/>
+    <ellipse cx="561" cy="735.6" rx="3.1" ry="2.3" fill="#1f1e22"/>
+    <path d="M558 740.5 Q561 743.5 564 740.5" fill="none" stroke="#3a3936" stroke-width="1.1"/>
+  </g>
+  <!-- fluffy white paws on the sill -->
+  <g stroke="#3a3936" stroke-width="1.2"><circle cx="553.6" cy="765.0" r="3" fill="#f6f3ee"/><circle cx="551.8" cy="767.5" r="3" fill="#f6f3ee"/><circle cx="548.9" cy="766.5" r="3" fill="#f6f3ee"/><circle cx="548.9" cy="763.5" r="3" fill="#f6f3ee"/><circle cx="551.8" cy="762.5" r="3" fill="#f6f3ee"/><circle cx="573.6" cy="765.0" r="3" fill="#f6f3ee"/><circle cx="571.8" cy="767.5" r="3" fill="#f6f3ee"/><circle cx="568.9" cy="766.5" r="3" fill="#f6f3ee"/><circle cx="568.9" cy="763.5" r="3" fill="#f6f3ee"/><circle cx="571.8" cy="762.5" r="3" fill="#f6f3ee"/></g>
+</g>
+<!-- cat lying on the roof above the study (right) -->
+<g class="pet-cat" stroke="#3a3936" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round">
+  <g class="cat-tail"><path d="M1036 637 C1048 638 1054 646 1050 654" fill="none" stroke-width="4" stroke="#3a3936"/><path d="M1036 637 C1048 638 1054 646 1050 654" fill="none" stroke-width="2.2" stroke="#d6d2cb"/></g>
+  <path d="M992 640 C992 626 1004 620 1018 620 C1032 620 1040 628 1040 640 Z" fill="#d6d2cb"/>
+  <path d="M1006 626 q3 -4 6 0 M1016 623 q3 -4 6 0 M1026 625 q3 -4 6 0" fill="none" stroke="#a8a39b" stroke-width="1.1"/>
+  <g class="cat-head">
+    <path d="M985 618 L988 606 L995 613 Z" fill="#d6d2cb"/>
+    <path d="M1003 613 L1009 606 L1010 618 Z" fill="#d6d2cb"/>
+    <ellipse cx="998" cy="624" rx="12" ry="10" fill="#d6d2cb"/>
+    <g class="cat-eyes" fill="none" stroke-width="1.2"><path d="M992 623 q2.5 2 5 0"/><path d="M1000 623 q2.5 2 5 0"/></g>
+    <path d="M997.5 627.5 l1 1 l1 -1" fill="none" stroke-width="1"/>
+  </g>
+  <rect x="994" y="636" width="9" height="5" rx="2.5" fill="#e4e0d9"/>
+</g>
+</svg>
+  </div>
   <h1>Drawn to life.</h1>
   <p>A home in the making</p>
 </section>
@@ -445,6 +571,7 @@
     const info=document.getElementById('infoFade');
     const img=document.getElementById('frameA');
     const mh=document.getElementById('masthead');
+    const petsDesk=document.getElementById('petsDesk');
     const darkEls=[story,document.getElementById('mModel'),document.querySelector('.footer')];
     const degrees=document.getElementById('degrees');
     const count=document.getElementById('frameCount');
@@ -469,7 +596,7 @@
       mh.classList.toggle('on-dark', darkEls.some(el=>{const r=el.getBoundingClientRect(); return r.top<=70 && r.bottom>70;}));
       const t=clamp((p-.04)/.76);
       const i=Math.round(t*N)%N;               // snap to one sharp frame, never blend two
-      if(i!==shown){ img.src=frames[i]; shown=i; }
+      if(i!==shown){ img.src=frames[i]; shown=i; petsDesk.classList.toggle('show', i===0); }
       const deg=Math.round(t*360);
       degrees.textContent=String(deg).padStart(3,'0')+'°';
       count.textContent=String(i+1).padStart(3,'0')+' / '+N;
@@ -509,7 +636,7 @@
     const load=src=>new Promise((ok,bad)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=bad;document.head.appendChild(s);});
     const start=async()=>{
       await load('assets/mobile/model-data.js'); await load('assets/mobile/viewer.js');
-      const v=window.MeadowcrestViewer(host, window.MEADOWCREST_MODEL, {onFirstTouch:()=>{document.getElementById('mHint').style.opacity=0;}});
+      const v=window.MeadowcrestViewer(host, window.MEADOWCREST_MODEL, {petsMarkup:document.getElementById('petsDesk').innerHTML, onFirstTouch:()=>{document.getElementById('mHint').style.opacity=0;}});
       if(v) document.getElementById('mPoster').style.opacity=0;
     };
     const io=new IntersectionObserver(([e])=>{ if(e.isIntersecting){ io.disconnect(); start().catch(err=>console.warn('3D viewer failed',err)); } },{rootMargin:'600px 0px'});

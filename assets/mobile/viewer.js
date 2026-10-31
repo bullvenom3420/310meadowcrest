@@ -48,6 +48,57 @@
     const bS = buf(gl, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]));
     const nTri = pos.length / 3, nLin = lin.length / 3;
 
+    /* ---- pets: animated sprites (dog in the Bed 2 window, cat on the roof) ---- */
+    const spriteP = prog(gl,
+      'attribute vec3 p;attribute vec2 t;uniform mat4 mvp;varying vec2 v;void main(){v=t;gl_Position=mvp*vec4(p,1.);}',
+      'precision mediump float;uniform sampler2D tex;varying vec2 v;void main(){vec4 c=texture2D(tex,v);if(c.a<0.02)discard;gl_FragColor=c;}');
+    const FT = 0.3048, W3 = (x, y, z) => [(x - 32.9) * FT, z * FT, -(y - 34.3) * FT];
+    const bUV = buf(gl, new Float32Array([0, 1, 1, 1, 0, 0, 1, 0]));
+    const pets = { ready: false, dog: null, cat: null };
+    function quadBuf(x0, x1, z0, z1, y) { const a = W3(x0, y, z0), b = W3(x1, y, z0), c = W3(x0, y, z1), d = W3(x1, y, z1); return buf(gl, new Float32Array([...a, ...b, ...c, ...d])); }
+    function makeTex(cv) { const t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t); gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, cv); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE); return t; }
+    function frames(markup, vb, pxW, pxH, tailClass, ox, oy, angles) {
+      return Promise.all(angles.map(a => new Promise(ok => {
+        const m = markup.replace('<g class="' + tailClass + '">', '<g class="' + tailClass + '" transform="rotate(' + a.toFixed(2) + ' ' + ox + ' ' + oy + ')">');
+        const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="' + vb + '" width="' + pxW + '" height="' + pxH + '">' + m + '</svg>';
+        const im = new Image(); im.onload = () => { const cv = document.createElement('canvas'); cv.width = pxW; cv.height = pxH; cv.getContext('2d').drawImage(im, 0, 0, pxW, pxH); ok(makeTex(cv)); };
+        im.onerror = () => ok(null); im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+      })));
+    }
+    if (opts.petsMarkup) {
+      const src = opts.petsMarkup;
+      const dogM = src.slice(src.indexOf('<g class="pet-dog"'), src.indexOf('<!-- cat lying')).replace(/ clip-path="[^"]*"/, '');
+      const catM = src.slice(src.indexOf('<g class="pet-cat"'));
+      const dogAngles = Array.from({ length: 12 }, (_, i) => 1 + 21 * Math.sin(i / 12 * Math.PI * 2));
+      const catKeys = [[0, 0], [.4, -24], [.55, -6], [.7, -18], [1, 0]];
+      const catAngles = Array.from({ length: 16 }, (_, i) => { const t = i / 16; let k = 0; while (catKeys[k + 1][0] < t) k++; const [t0, a0] = catKeys[k], [t1, a1] = catKeys[k + 1]; const u = (t - t0) / (t1 - t0); return a0 + (a1 - a0) * (0.5 - 0.5 * Math.cos(Math.PI * u)); });
+      Promise.all([frames(dogM, '525 650 72 119', 288, 476, 'dog-tail', 575, 760, dogAngles), frames(catM, '978 598 86 64', 344, 256, 'cat-tail', 1036, 637, catAngles)]).then(([d, c]) => {
+        if (d.some(x => !x) || c.some(x => !x)) return;
+        pets.dog = { tex: d, buf: quadBuf(14.77, 19.52, 2.49, 10.56, 4.44), period: 840 };
+        pets.cat = { tex: c, w: 50.14 - 44.63, z0: 9.62 + 0.5, z1: 13.96 + 0.5, cx: 47.39, y: 4.8, period: 2600 };
+        pets.ready = true; kick();
+      });
+    }
+    function drawPets(vp, R) {
+      if (!pets.ready) return;
+      const now = performance.now();
+      gl.useProgram(spriteP); gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+      const tl = gl.getAttribLocation(spriteP, 't'); gl.bindBuffer(gl.ARRAY_BUFFER, bUV); gl.enableVertexAttribArray(tl); gl.vertexAttribPointer(tl, 2, gl.FLOAT, false, 0, 0);
+      // dog: fixed in the window plane, turns with the house
+      const d = pets.dog; gl.uniformMatrix4fv(gl.getUniformLocation(spriteP, 'mvp'), false, mul(vp, R));
+      gl.bindTexture(gl.TEXTURE_2D, d.tex[Math.floor(now / d.period * d.tex.length) % d.tex.length]);
+      let pl = attr(spriteP, 'p', d.buf, 3); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      // cat: stays on its roof spot but always turns to face the viewer
+      const c = pets.cat, cxm = W3(c.cx, c.y, 0), hw = c.w * FT / 2;
+      const T = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, cxm[0], 0, cxm[2], 1];
+      const quad = new Float32Array([-hw, c.z0 * FT, 0, hw, c.z0 * FT, 0, -hw, c.z1 * FT, 0, hw, c.z1 * FT, 0]);
+      if (!c.buf) c.buf = buf(gl, quad);
+      gl.uniformMatrix4fv(gl.getUniformLocation(spriteP, 'mvp'), false, mul(mul(vp, R), mul(T, rotY(-angle))));
+      gl.bindTexture(gl.TEXTURE_2D, c.tex[Math.floor(now / c.period * c.tex.length) % c.tex.length]);
+      pl = attr(spriteP, 'p', c.buf, 3); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      gl.disableVertexAttribArray(pl); gl.disableVertexAttribArray(tl); gl.disable(gl.BLEND);
+    }
+
     let angle = 0, vel = 0, auto = true, dragging = false, lastX = 0, lastT = 0, visible = true, raf = 0;
     const view = lookAt([0, 9.5, 46], [0, 3.6, 0], [0, 1, 0]);
     function size() {
@@ -79,12 +130,13 @@
       // outlines
       gl.useProgram(lineP); gl.uniformMatrix4fv(gl.getUniformLocation(lineP, 'mvp'), false, mvp);
       const a4 = attr(lineP, 'p', bL, 3); gl.drawArrays(gl.LINES, 0, nLin); gl.disableVertexAttribArray(a4);
+      drawPets(vp, R);
     }
     function tick() {
       raf = 0;
       if (!dragging) { if (auto) angle += 0.002975; else { angle += vel; vel *= 0.94; if (Math.abs(vel) < 1e-5) vel = 0; } }
       draw();
-      if (visible && (auto || dragging || vel)) raf = requestAnimationFrame(tick);
+      if (visible && (auto || dragging || vel || pets.ready)) raf = requestAnimationFrame(tick);
     }
     function kick() { if (!raf && visible) raf = requestAnimationFrame(tick); }
 
