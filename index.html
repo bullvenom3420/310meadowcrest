@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#f9f8f5">
+  <meta name="description" content="310 Meadowcrest Drive. A Tudor-style home with six bedrooms, five and a half baths, two living rooms, a chef's kitchen, a pool and covered outdoor living.">
+  <title>310 Meadowcrest Drive</title>
+  <link rel="preload" as="image" href="assets/front_elevation.jpg" media="(min-width: 801px)">
+  <link rel="preload" as="image" href="assets/front_elevation-1200.webp" media="(max-width: 800px)">
+  <link rel="preload" as="image" href="assets/frames/frame-000.webp" media="(min-width: 801px)">
+  <link rel="preload" as="image" href="assets/mobile/intro-mobile-poster.jpg" media="(max-width: 800px)">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..600&family=Instrument+Serif:ital@0;1&display=swap">
+  <style>
+    :root{--ink:#373a35;--muted:#777970;--cream:#f9f8f5;--line:#e6e2dc;--accent:#92877b;--night:#13121b;--night-2:#1c1a28;--night-ink:#ecebf2;--night-muted:#9a97ab}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--cream);color:var(--ink);font-family:Arial,Helvetica,sans-serif;-webkit-font-smoothing:antialiased}button{font:inherit}a{color:inherit;text-decoration:none}
+    .masthead{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;justify-content:space-between;align-items:center;padding:27px clamp(19px,4.5vw,72px);pointer-events:none;background:linear-gradient(180deg,rgba(249,248,245,.96),rgba(249,248,245,0));}
+    .brand,.navigation{pointer-events:auto}.brand{font-family:Georgia,'Times New Roman',serif;font-size:23px;letter-spacing:.1em;white-space:nowrap}.brand span{font-size:12px;vertical-align:5px;letter-spacing:.12em;margin:0 6px;color:#998d81}.navigation{display:flex;gap:28px;font-size:10px;letter-spacing:.22em;text-transform:uppercase;font-weight:600}.navigation a{transition:opacity .2s}.navigation a:hover{opacity:.5}
+    /* ---------- desktop scroll story ---------- */
+    .story{height:300vh;position:relative}.stage{height:100svh;min-height:500px;position:sticky;top:0;overflow:hidden;display:grid;place-items:center;background:var(--cream)}
+    .paper-pattern{position:absolute;inset:0;background-image:radial-gradient(#6f6b60 0.35px, transparent .45px);background-size:9px 9px;opacity:.045;pointer-events:none}
+    .drawing-stage,.model-stage{position:absolute;inset:0;display:flex;justify-content:center;align-items:center;transition:none;will-change:opacity}
+    .drawing-stage{z-index:3;opacity:1}.drawing-stage .illustration{width:min(91vw,1460px);object-fit:contain;max-height:75vh;filter:contrast(.98);mix-blend-mode:multiply}
+    .model-stage{z-index:4;opacity:0}.spin-image{position:absolute;width:min(100vw,1500px);height:100svh;max-height:900px;object-fit:contain;object-position:center center;user-select:none;-webkit-user-drag:none}
+    .eyebrow{font-size:10px;letter-spacing:.3em;text-transform:uppercase;font-weight:600;color:#8d867b}
+    .drawing-footer{position:absolute;bottom:max(36px,8vh);left:50%;transform:translateX(-50%);text-align:center;white-space:nowrap;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#77786f;line-height:2.3}
+    .disclaimer{position:absolute;z-index:9;top:clamp(94px,13vh,138px);left:clamp(19px,4.5vw,72px);background:rgba(250,249,246,.82);backdrop-filter:blur(12px);border:1px solid rgba(150,144,135,.26);padding:15px 19px 13px;opacity:0;transition:opacity .3s ease;border-radius:2px;pointer-events:none;min-width:143px}
+    .disclaimer strong{display:block;font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase}.disclaimer small{display:block;font-size:10px;color:#928d85;letter-spacing:.055em;margin-top:6px}
+    .progress{z-index:10;position:absolute;bottom:max(36px,5.5vh);left:clamp(19px,4.5vw,72px);opacity:0;transition:opacity .3s ease;display:flex;align-items:center;gap:15px;color:#77746f;font-size:10px;letter-spacing:.2em;text-transform:uppercase}.progress .line{display:inline-block;width:70px;height:1px;background:#d8d4ce;position:relative}.progress .line::after{content:'';position:absolute;inset:0 auto 0 0;width:var(--pct,0%);background:#616058}
+    .scroll-cue{position:absolute;z-index:11;left:50%;bottom:26px;transform:translateX(-50%);display:flex;gap:12px;align-items:center;color:#858177;font-size:10px;letter-spacing:.22em;text-transform:uppercase;transition:opacity .2s}.scroll-cue i{height:36px;width:1px;background:#a9a39a;display:block;position:relative;overflow:hidden}.scroll-cue i::after{content:'';position:absolute;top:-40%;height:40%;width:1px;background:#4a4b47;animation:down 2s ease-in-out infinite}@keyframes down{to{top:130%}}
+    .info-fade{position:absolute;inset:auto 0 12.5vh;text-align:center;z-index:7;pointer-events:none;opacity:0;transition:opacity .3s}.info-fade h1{font-family:Georgia,'Times New Roman',serif;font-size:clamp(25px,3.6vw,49px);font-weight:400;letter-spacing:.05em;margin:0 0 10px}.info-fade p{margin:0;color:#807e76;font-size:11px;letter-spacing:.19em;text-transform:uppercase}
+    .divider-kicker{display:flex;align-items:center;gap:22px;letter-spacing:.26em;font-size:10px;text-transform:uppercase;color:#8d877f}.divider-kicker:before,.divider-kicker:after{content:'';height:1px;background:var(--line);flex:1}
+    main{background:#f9f8f5;position:relative;z-index:12}.section{padding:clamp(80px,11vw,155px) clamp(20px,6vw,110px)}.section-head{max-width:770px;margin:0 auto 62px;text-align:center}.section-head h2{font-family:Georgia,'Times New Roman',serif;font-weight:400;font-size:clamp(36px,4.4vw,70px);letter-spacing:-.018em;margin:16px 0 20px}.section-head p{color:#88847b;font-family:Georgia,serif;font-size:clamp(16px,1.6vw,20px);line-height:1.7}
+    .inspo-grid{display:grid;grid-template-columns:1.2fr .85fr;gap:20px;align-items:start;max-width:1500px;margin:auto}.tile{margin:0;background:#fff}.tile img{width:100%;object-fit:cover;display:block}.tile:first-child img{aspect-ratio:4/3}.tile:nth-child(2) img{aspect-ratio:4/5}.tile figcaption{padding:18px 4px 0;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#77756f}
+    .drawings{background:#f0efec}.drawings-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;max-width:1400px;margin:auto}.drawing-card{margin:0;background:#fff;border:1px solid #e1ded8;min-width:0}.drawing-card img{display:block;width:100%;height:clamp(190px,24vw,340px);object-fit:contain;background:#fff;padding:14px}.drawing-card figcaption{border-top:1px solid #eeeae3;display:flex;justify-content:space-between;gap:10px;padding:16px 19px;color:#76736d;letter-spacing:.16em;font-size:10px;text-transform:uppercase}
+    .endnote{margin:48px auto 0;max-width:850px;font-size:12px;line-height:1.8;text-align:center;color:#8c8982}
+    .footer{padding:55px clamp(22px,6vw,110px);background:#353b39;color:#f7f5f0;display:flex;justify-content:space-between;align-items:end;gap:20px}.footer .wordmark{font:normal clamp(28px,4vw,55px) Georgia,serif;letter-spacing:.06em}.footer .sub{margin-top:10px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#d0d0ca}.footer .sidenote{font-size:10px;letter-spacing:.12em;color:#c8c5bf;text-transform:uppercase;line-height:1.9}
+    /* ---------- mobile-only blocks (hidden on desktop) ---------- */
+    .m-intro,.m-3d{display:none}
+    /* interactive 3D model: desktop + phone */
+    .m-model{display:block;background:var(--night);color:var(--night-ink);padding:clamp(90px,10vw,150px) 0 clamp(40px,4vw,60px);text-align:center;scroll-margin-top:60px}
+    .m-model .divider-kicker{color:var(--night-muted);max-width:1240px;margin:0 auto;padding:0 clamp(20px,5vw,72px)}.m-model .divider-kicker:before,.m-model .divider-kicker:after{background:rgba(236,235,242,.14)}
+    .m-model h2{font-family:var(--serif);font-weight:400;font-size:clamp(38px,4.6vw,72px);margin:18px 20px 10px}
+    .m-model .lede{color:var(--night-muted);font-size:15px;line-height:1.6;margin:0 24px}
+    .m-viewer{position:relative;height:min(62vh,640px);max-width:1240px;margin:28px auto 12px;touch-action:pan-y;background:radial-gradient(55% 55% at 50% 62%,var(--night-2),var(--night) 100%)}
+    .m-viewer canvas{display:block;width:100%;height:100%;touch-action:pan-y}
+    .m-viewer .m-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity .6s;pointer-events:none}
+    .m-hint{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--night-muted);display:flex;align-items:center;justify-content:center;gap:10px;transition:opacity .6s}
+    .m-hint svg{width:22px;height:12px}
+    .m-kicker{color:#9a97ab}
+    .hint-touch{display:none}
+    @media(hover:none){.hint-touch{display:inline}.hint-mouse{display:none}}
+    @media(max-width:800px){
+      .story{display:none}
+      .masthead{position:absolute;padding:24px 20px;background:none;color:var(--night-ink)}.brand{font-size:15px;letter-spacing:.08em}.brand span{color:var(--night-muted);margin:0 3px}.navigation{gap:12px;font-size:8px;letter-spacing:.18em}
+      .m-intro{display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:100svh;padding:96px 0 40px;background:var(--night);color:var(--night-ink);text-align:center;position:relative;overflow:hidden}
+      .m-intro .m-chip{font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--night-muted);border:1px solid rgba(236,235,242,.14);padding:9px 14px;border-radius:2px;margin-bottom:18px}
+      .m-intro video{display:block;width:112vw;max-width:none;height:auto;aspect-ratio:1080/780;margin:0 -6vw;background:transparent;pointer-events:none}
+      .m-intro h1{font-family:Georgia,'Times New Roman',serif;font-weight:400;font-size:30px;letter-spacing:.05em;margin:22px 20px 10px;opacity:0;transform:translateY(8px);transition:opacity 1.2s ease,transform 1.2s ease}
+      .m-intro p{margin:0 20px;color:var(--night-muted);font-size:10px;letter-spacing:.24em;text-transform:uppercase;opacity:0;transition:opacity 1.2s ease .25s}
+      .m-intro.done h1{opacity:1;transform:none}.m-intro.done p{opacity:1}
+      .m-model{display:block;background:var(--night);color:var(--night-ink);padding:72px 0 28px;text-align:center}
+      .m-model .divider-kicker{color:var(--night-muted);padding:0 20px}.m-model .divider-kicker:before,.m-model .divider-kicker:after{background:rgba(236,235,242,.14)}
+      .m-model h2{font-family:Georgia,'Times New Roman',serif;font-weight:400;font-size:32px;margin:14px 20px 8px}
+      .m-model .lede{color:var(--night-muted);font-family:Georgia,serif;font-size:15px;line-height:1.6;margin:0 24px}
+      .m-viewer{position:relative;height:min(78vw,440px);margin:18px 0 8px;touch-action:pan-y;background:radial-gradient(60% 55% at 50% 62%,var(--night-2),var(--night) 100%)}
+      .m-viewer canvas{display:block;width:100%;height:100%;touch-action:pan-y}
+      .m-hint{font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--night-muted);display:flex;align-items:center;justify-content:center;gap:10px;transition:opacity .6s}
+      .m-hint svg{width:22px;height:12px}
+      .m-viewer .m-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity .6s;pointer-events:none}
+      .footer{background:var(--night);flex-direction:column;align-items:start}
+      .inspo-grid{grid-template-columns:1fr}.drawings-grid{grid-template-columns:1fr}.tile figcaption{font-size:9px}.section-head{margin-bottom:40px}
+    }
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.scroll-cue i::after{animation:none}}
+    /* ================= refined system (v2) ================= */
+    :root{--stone:#f5f3ef;--paper:#fbfaf8;--ink:#17161d;--ink-2:#4b4953;--muted:#8a8791;--rule:#dfdbd4;--bronze:#8b7b65;
+          --serif:'Instrument Serif',Georgia,'Times New Roman',serif;--sans:'Geist','Helvetica Neue',Arial,sans-serif;--cream:var(--stone)}
+    body{font-family:var(--sans);background:var(--stone);color:var(--ink)}
+    .brand{font-family:var(--serif);font-size:24px;letter-spacing:.06em}
+    .navigation{font-weight:500;letter-spacing:.18em}
+    .masthead{background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,255,255,0))}
+    /* desktop scroll: same night palette as the phone intro */
+    .story{height:270vh}
+    .stage{background:radial-gradient(70% 62% at 50% 58%,#1d1b29 0%,#13121b 72%)}
+    .story .drawing-stage{display:none}
+    .model-stage{opacity:1}
+    .story .spin-image{top:7svh;height:76svh;max-height:780px}
+    .info-fade{bottom:9vh}
+    .disclaimer{top:clamp(96px,13vh,132px);left:50%;transform:translateX(-50%);min-width:0;white-space:nowrap;background:transparent;backdrop-filter:none;border:1px solid rgba(236,235,242,.16);padding:10px 16px;color:#9a97ab;font-size:10px;letter-spacing:.24em;text-transform:uppercase}
+    .progress{color:#9a97ab}.progress .line{background:rgba(236,235,242,.16)}.progress .line::after{background:#ecebf2}
+    .scroll-cue{color:#9a97ab}.scroll-cue i{background:rgba(236,235,242,.2)}.scroll-cue i::after{background:#ecebf2}
+    .info-fade h1{color:#ecebf2}.info-fade p{color:#9a97ab}
+    .masthead.on-dark{background:linear-gradient(180deg,rgba(19,18,27,.9),rgba(19,18,27,0));color:#ecebf2}
+    .masthead.on-dark .brand span{color:#9a97ab}
+    .masthead{transition:color .4s ease}
+    /* home screen after the animation: front elevation, then the description */
+    .m-hero{display:block;background:#fff;padding:clamp(110px,12vw,150px) 0 0}
+    .m-hero img{display:block;width:min(100% - 2*clamp(20px,5vw,72px),1240px);height:auto;margin:0 auto}
+    .m-hero-cap{display:flex;justify-content:space-between;max-width:1240px;margin:0 auto;padding:22px clamp(20px,5vw,72px) 26px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--rule);box-sizing:content-box}
+    .paper-pattern{display:none}
+    .info-fade h1{font-family:var(--serif);font-size:clamp(34px,4.6vw,64px);letter-spacing:.01em}
+    .wrap{max-width:1320px;margin:0 auto;padding-left:clamp(20px,5vw,72px);padding-right:clamp(20px,5vw,72px)}
+    .label{font-family:var(--sans);font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--bronze)}
+    .h2{font-family:var(--serif);font-weight:400;font-size:clamp(38px,4.6vw,72px);line-height:1.02;letter-spacing:-.01em;margin:18px 0 0;text-wrap:balance}
+    main{background:var(--stone)}
+    .block{padding-block:clamp(88px,11vw,168px)}
+    .block + .block{border-top:1px solid var(--rule)}
+    /* overview */
+    .ov-grid{display:grid;grid-template-columns:1.35fr .65fr;gap:clamp(40px,7vw,120px);align-items:end}
+    .ov-lede{font-family:var(--serif);font-size:clamp(30px,3.3vw,50px);line-height:1.14;margin:22px 0 0;text-wrap:balance}
+    .ov-body{color:var(--ink-2);font-size:16px;line-height:1.75;max-width:52ch;margin:26px 0 0}
+    .facts{margin:0;display:grid;gap:0}
+    .facts div{display:flex;justify-content:space-between;gap:16px;padding:14px 0;border-top:1px solid var(--rule);font-size:13px}
+    .facts div:last-child{border-bottom:1px solid var(--rule)}
+    .facts dt{color:var(--muted)}.facts dd{margin:0;text-align:right}
+    .stats{display:grid;grid-template-columns:repeat(6,1fr);margin-top:clamp(64px,8vw,110px);border-top:1px solid var(--ink)}
+    .stat{padding:26px 18px 0 0}
+    .stat b{display:block;font-family:var(--serif);font-weight:400;font-size:clamp(34px,3.6vw,54px);line-height:1;font-variant-numeric:lining-nums tabular-nums}
+    .stat span{display:block;margin-top:12px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+    /* design direction */
+    .dd-head{display:flex;justify-content:space-between;align-items:end;gap:40px;margin-bottom:clamp(40px,5vw,72px)}
+    .dd-head p{max-width:40ch;color:var(--ink-2);line-height:1.7;margin:0;font-size:15px}
+    .dd-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:clamp(14px,1.6vw,24px);align-items:stretch}
+    .dd-grid figure{margin:0;position:relative;overflow:hidden;background:#e9e6e0}
+    .dd-grid img{display:block;width:100%;height:100%;object-fit:cover;transition:transform 1.4s cubic-bezier(.2,.6,.2,1)}
+    .dd-grid figure:hover img{transform:scale(1.025)}
+    .dd-grid .a{aspect-ratio:4/3}.dd-grid .b{aspect-ratio:auto}
+    .dd-grid figcaption{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;gap:12px;padding:16px 18px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:linear-gradient(0deg,rgba(15,14,20,.55),rgba(15,14,20,0))}
+    .note{margin-top:18px;font-size:12px;color:var(--muted)}
+    /* plans */
+    .pl-head{display:flex;justify-content:space-between;align-items:end;gap:30px;flex-wrap:wrap}
+    .tabs{display:flex;gap:0;border:1px solid var(--rule)}
+    .tabs button{appearance:none;border:0;background:transparent;padding:13px 20px;font:500 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);cursor:pointer;display:flex;gap:10px;align-items:baseline}
+    .tabs button small{font-size:11px;letter-spacing:.04em;text-transform:none;color:inherit;opacity:.8}
+    .tabs button[aria-selected="true"]{background:var(--ink);color:var(--paper)}
+    .tabs button:focus-visible{outline:2px solid var(--bronze);outline-offset:2px}
+    .pl-grid{display:grid;grid-template-columns:1.45fr .8fr;gap:clamp(30px,5vw,80px);margin-top:clamp(36px,4vw,56px);align-items:start}
+    .pl-sheet{background:var(--paper);border:1px solid var(--rule);padding:clamp(14px,2vw,28px);cursor:zoom-in}
+    .pl-sheet img{display:block;width:100%;height:auto;mix-blend-mode:multiply}
+    .rooms{list-style:none;margin:0;padding:0}
+    .rooms li{display:flex;justify-content:space-between;gap:16px;padding:15px 0;border-top:1px solid var(--rule);font-size:14px}
+    .rooms li:last-child{border-bottom:1px solid var(--rule)}
+    .rooms li span:last-child{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+    .pl-panel[hidden]{display:none!important}
+    .pl-cap{margin-top:14px;font-size:12px;color:var(--muted);display:flex;justify-content:space-between}
+    /* elevations */
+    .el-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,1.6vw,24px);margin-top:clamp(36px,4vw,56px)}
+    .el-grid figure{margin:0}
+    .el-grid button{display:block;width:100%;padding:clamp(14px,2vw,26px);background:var(--paper);border:1px solid var(--rule);cursor:zoom-in}
+    .el-grid button:focus-visible{outline:2px solid var(--bronze);outline-offset:3px}
+    .el-grid img{display:block;width:100%;aspect-ratio:2/1;object-fit:contain;mix-blend-mode:multiply}
+    .el-grid figcaption{display:flex;justify-content:space-between;padding-top:14px;font-size:12px;color:var(--muted)}
+    .disclosure{margin-top:clamp(48px,6vw,80px);max-width:78ch;font-size:12px;line-height:1.8;color:var(--muted)}
+    /* lightbox */
+    dialog.lb{border:0;padding:0;max-width:none;max-height:none;width:100vw;height:100svh;background:rgba(19,18,27,.94)}
+    dialog.lb::backdrop{background:transparent}
+    dialog.lb img{position:absolute;inset:clamp(16px,5vh,60px) clamp(16px,5vw,60px);width:calc(100% - 2*clamp(16px,5vw,60px));height:calc(100% - 2*clamp(16px,5vh,60px));object-fit:contain;background:#fbfaf8;padding:clamp(8px,1.5vw,20px)}
+    dialog.lb button{position:absolute;top:14px;right:14px;z-index:2;appearance:none;border:1px solid rgba(255,255,255,.3);background:rgba(19,18,27,.6);color:#fff;font:500 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;padding:12px 16px;cursor:pointer}
+    /* footer */
+    .footer{background:var(--night);color:#ecebf2;display:block;padding:clamp(70px,9vw,130px) 0 40px}
+    .ft-top{display:flex;justify-content:space-between;align-items:end;gap:30px;flex-wrap:wrap;padding-bottom:clamp(50px,6vw,90px);border-bottom:1px solid rgba(236,235,242,.14)}
+    .ft-word{font-family:var(--serif);font-size:clamp(48px,8vw,128px);line-height:.9;letter-spacing:-.01em}
+    .ft-meta{display:grid;gap:8px;font-size:12px;color:#a19eb0;text-align:right}
+    .ft-bot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;padding-top:24px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#7f7c8e}
+    @media(max-width:900px){
+      .ov-grid,.pl-grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,1fr)}.stat{padding-bottom:26px}
+      .dd-head{flex-direction:column;align-items:start}.dd-grid{grid-template-columns:1fr}.dd-grid .b{aspect-ratio:4/5}
+      .el-grid{grid-template-columns:1fr}.ft-meta{text-align:left}
+    }
+    @media(max-width:800px){
+      .brand{font-family:var(--serif);font-size:19px}
+      .masthead{background:none}.navigation{display:none}
+      .tabs button small{display:none}
+      .m-intro h1,.m-model h2{font-family:var(--serif);font-weight:400}.m-intro h1{font-size:38px}.m-model h2{font-size:38px}
+      .m-model .lede{font-family:var(--sans);font-size:14px}
+      .m-model{border-top:0}
+      .tabs{width:100%}.tabs button{flex:1;justify-content:center;padding:13px 10px}
+      .stat b{font-size:34px}
+    }
+    .features{list-style:none;margin:44px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:10px 28px;font-size:13px;color:var(--ink-2)}
+    .features li{display:flex;align-items:center;gap:10px}.features li::before{content:"";width:5px;height:5px;background:var(--bronze);border-radius:50%}
+    /* ---------- mobile v3: captive intro -> elevation home screen ---------- */
+    @media(max-width:800px){
+      html.locked,html.locked body{overflow:hidden;height:100%;overscroll-behavior:none}
+      .masthead{position:fixed;padding:calc(12px + env(safe-area-inset-top,0px)) max(18px,env(safe-area-inset-right,0px)) 12px max(18px,env(safe-area-inset-left,0px));background:rgba(251,250,248,.86);-webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);color:var(--ink);border-bottom:1px solid transparent;transition:border-color .3s}
+      .masthead.scrolled{border-bottom-color:var(--rule)}
+      .masthead .brand span{color:var(--muted)}
+      .m-3d{display:inline-flex;align-items:center;gap:7px;pointer-events:auto;font:500 10px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--ink);padding:8px 12px 8px 10px;border:1px solid var(--rule);border-radius:999px;background:rgba(255,255,255,.6)}
+      .m-3d svg{width:13px;height:13px}
+      .m-3d:active{background:var(--ink);color:var(--paper)}
+      .m-intro{position:fixed;inset:0;z-index:100;min-height:0;height:100%;padding:calc(40px + env(safe-area-inset-top,0px)) 0 calc(40px + env(safe-area-inset-bottom,0px));transition:opacity .9s ease}
+      .m-intro.out{opacity:0;pointer-events:none}
+      .m-hero{display:block;background:#fff;padding:calc(70px + env(safe-area-inset-top,0px)) 0 0}
+      .m-hero img{display:block;width:100%;height:auto;padding:18px 6px 6px}
+      .m-hero-cap{display:flex;justify-content:space-between;padding:10px max(20px,env(safe-area-inset-left,0px)) 18px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--rule)}
+      #overview.block{padding-top:44px}
+      .m-model{scroll-margin-top:56px}
+    }
+    @media(prefers-reduced-motion:reduce){.dd-grid img{transition:none}}
+  </style>
+</head>
+<body id="top">
+<header class="masthead" id="masthead"><a href="#top" class="brand" aria-label="310 Meadowcrest home">310 <span>·</span> MEADOWCREST</a><nav class="navigation" aria-label="Main"><a href="#overview">Residence</a><a href="#plans">Plans</a><a href="#drawings">Drawings</a><a href="#mModel">3D Model</a></nav><a class="m-3d" href="#mModel"><svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.1"><path d="M8 1.5 14 5v6l-6 3.5L2 11V5z"/><path d="M2 5l6 3.5L14 5M8 8.5V14.5"/></svg>3D Model</a></header>
+
+<!-- DESKTOP: scroll to rotate -->
+<section class="story" id="intro" aria-label="Scroll to rotate a conceptual 3D massing model of the home">
+  <div class="stage">
+    <div class="paper-pattern"></div>
+    <div class="drawing-stage" id="drawingStage">
+      <img class="illustration" src="assets/front_elevation.jpg" alt="Original front architectural elevation for 310 Meadowcrest, November 20, 2025" loading="lazy">
+      <div class="drawing-footer">Original architectural elevation <span style="padding:0 14px">/</span> November 20, 2025</div>
+    </div>
+    <div class="model-stage" id="modelStage" aria-label="A 120-frame conceptual massing model rotating 360 degrees">
+      <img class="spin-image" id="frameA" src="assets/frames/frame-000.webp" alt="Conceptual three-dimensional massing model of 310 Meadowcrest" decoding="sync">
+    </div>
+    <div id="disclaimer" class="disclaimer">Conceptual rendering</div>
+    <div class="info-fade" id="infoFade"><h1>Drawn to life.</h1><p>A home in the making</p></div>
+    <div class="progress" id="progress"><span id="degrees">000°</span><span id="frameCount">001 / 120</span></div>
+    <div class="scroll-cue" id="scrollCue"><span>Scroll to explore</span><i aria-hidden="true"></i></div>
+  </div>
+</section>
+
+<!-- MOBILE: one-shot animation on dark -->
+<section class="m-intro" id="mIntro" aria-label="Conceptual massing model of the home">
+  <div class="m-chip">Conceptual rendering</div>
+  <video id="mVideo" muted playsinline preload="none" poster="assets/mobile/intro-mobile-poster.jpg" aria-label="The conceptual massing model turns one full rotation">
+    <source data-src="assets/mobile/intro-mobile.mp4" type="video/mp4">
+  </video>
+  <h1>Drawn to life.</h1>
+  <p>A home in the making</p>
+</section>
+
+<!-- HOME SCREEN (phone + desktop): front elevation, description directly beneath -->
+<section class="m-hero" aria-label="Front elevation">
+  <img src="assets/front_elevation-1200.webp" srcset="assets/front_elevation-1200.webp 1200w, assets/front_elevation.jpg 2300w" sizes="(max-width: 800px) 100vw, 1240px" width="1200" height="586" alt="Front elevation drawing of 310 Meadowcrest">
+  <div class="m-hero-cap"><span>Front elevation</span><span>November 2025</span></div>
+</section>
+
+<main>
+  <!-- OVERVIEW -->
+  <section class="block" id="overview" aria-labelledby="ov-title">
+    <div class="wrap">
+      <div class="ov-grid">
+        <div>
+          <div class="label" id="ov-title">The residence</div>
+          <p class="ov-lede">A Tudor-style residence of 5,414 square feet, now in planning.</p>
+          <p class="ov-body">Six bedrooms, five and a half baths and two living rooms, with a two-story foyer and a chef's kitchen. The family room, kitchen and dining room open to a covered outdoor living area and the pool. The renderings and plans shown here are based on the November 2025 drawings.</p>
+        </div>
+        <dl class="facts">
+          <div><dt>Address</dt><dd>310 Meadowcrest Drive</dd></div>
+          <div><dt>Style</dt><dd>Tudor</dd></div>
+          <div><dt>Status</dt><dd>In design</dd></div>
+          <div><dt>Plans dated</dt><dd>November 20, 2025</dd></div>
+        </dl>
+      </div>
+      <div class="stats" role="list">
+        <div class="stat" role="listitem"><b>5,414</b><span>Total sq ft</span></div>
+        <div class="stat" role="listitem"><b>4,450</b><span>Living sq ft</span></div>
+        <div class="stat" role="listitem"><b>6</b><span>Bedrooms</span></div>
+        <div class="stat" role="listitem"><b>5.5</b><span>Baths</span></div>
+        <div class="stat" role="listitem"><b>2</b><span>Living rooms</span></div>
+        <div class="stat" role="listitem"><b>2</b><span>Laundry rooms</span></div>
+      </div>
+      <ul class="features" aria-label="Highlights"><li>Chef's kitchen</li><li>Pool</li><li>Covered outdoor living</li><li>Two-story foyer, 20′6″</li><li>Primary suite on the main floor</li><li>Study and media room</li></ul>
+    </div>
+  </section>
+
+  <!-- DESIGN DIRECTION -->
+  <section class="block" id="inspiration" aria-labelledby="dd-title">
+    <div class="wrap">
+      <div class="dd-head">
+        <div><div class="label">Design direction</div><h2 class="h2" id="dd-title">Exterior and kitchen inspiration.</h2></div>
+        <p>Early reference images for the look of the home. Final materials and finishes have not been selected.</p>
+      </div>
+      <div class="dd-grid">
+        <figure class="a"><img src="assets/inspiration-exterior.webp" srcset="assets/inspiration-exterior-900.webp 900w, assets/inspiration-exterior.webp 1448w" sizes="(max-width: 900px) 100vw, 60vw" alt="Exterior inspiration: a white brick traditional home beneath mature trees" loading="lazy"><figcaption><span>Exterior</span><span>Inspiration</span></figcaption></figure>
+        <figure class="b"><img src="assets/inspiration-kitchen.webp" srcset="assets/inspiration-kitchen-700.webp 700w, assets/inspiration-kitchen.webp 1122w" sizes="(max-width: 900px) 100vw, 38vw" alt="Kitchen inspiration: arched range alcove, stone backsplash and wood cabinetry" loading="lazy"><figcaption><span>Kitchen</span><span>Inspiration</span></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLANS -->
+  <section class="block" id="plans" aria-labelledby="pl-title">
+    <div class="wrap">
+      <div class="pl-head">
+        <div><div class="label">The plan</div><h2 class="h2" id="pl-title">Two floors, 4,450 conditioned square feet.</h2></div>
+        <div class="tabs" role="tablist" aria-label="Floor">
+          <button role="tab" id="tab-1" aria-controls="panel-1" aria-selected="true">First floor <small>2,630 sf</small></button>
+          <button role="tab" id="tab-2" aria-controls="panel-2" aria-selected="false" tabindex="-1">Second floor <small>1,820 sf</small></button>
+        </div>
+      </div>
+      <div class="pl-panel" id="panel-1" role="tabpanel" aria-labelledby="tab-1">
+        <div class="pl-grid">
+          <div><div class="pl-sheet" data-full="assets/first_plan.webp"><img src="assets/first_plan.webp" srcset="assets/first_plan-1000.webp 1000w, assets/first_plan.webp 1600w" sizes="(max-width: 900px) 100vw, 60vw" alt="First floor plan" loading="lazy"></div><div class="pl-cap"><span>First floor plan</span><span>Tap to enlarge</span></div></div>
+          <ul class="rooms" aria-label="First floor rooms and ceiling heights">
+            <li><span>Two-story foyer</span><span>20′6″ ceiling</span></li>
+            <li><span>Study</span><span>10′</span></li>
+            <li><span>Dining</span><span>10′</span></li>
+            <li><span>Family room with gas fireplace</span><span>10′</span></li>
+            <li><span>Chef's kitchen with 5′ × 8′ island</span><span>10′</span></li>
+            <li><span>Scullery and pantry</span><span>10′</span></li>
+            <li><span>Primary suite</span><span>Box ceiling to 11′</span></li>
+            <li><span>Bedroom 2 with bath</span><span>10′</span></li>
+            <li><span>Covered outdoor living with grill</span><span>10′</span></li>
+            <li><span>Pool</span><span>Outdoor</span></li>
+            <li><span>Two-car garage</span><span>551 sf</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="pl-panel" id="panel-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+        <div class="pl-grid">
+          <div><div class="pl-sheet" data-full="assets/second_plan.webp"><img src="assets/second_plan.webp" srcset="assets/second_plan-1000.webp 1000w, assets/second_plan.webp 1600w" sizes="(max-width: 900px) 100vw, 60vw" alt="Second floor plan" loading="lazy"></div><div class="pl-cap"><span>Second floor plan</span><span>Tap to enlarge</span></div></div>
+          <ul class="rooms" aria-label="Second floor rooms and ceiling heights">
+            <li><span>Play room</span><span>Box ceiling to 10′</span></li>
+            <li><span>Media room / Bedroom 6</span><span>Sloped to 10′</span></li>
+            <li><span>Bedroom 3</span><span>Sloped to 10′</span></li>
+            <li><span>Bedroom 4</span><span>Sloped to 10′</span></li>
+            <li><span>Bedroom 5</span><span>Sloped to 10′</span></li>
+            <li><span>Three full baths</span><span>8′</span></li>
+            <li><span>Storage and attic access</span><span></span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ELEVATIONS -->
+  <section class="block" id="drawings" aria-labelledby="el-title">
+    <div class="wrap">
+      <div class="label">Elevations</div><h2 class="h2" id="el-title">Front and rear elevations.</h2>
+      <div class="el-grid">
+        <figure><button type="button" data-full="assets/front_elevation.jpg" aria-label="Enlarge front elevation"><img src="assets/front_elevation.jpg" srcset="assets/front_elevation-1200.webp 1200w, assets/front_elevation.jpg 2300w" sizes="(max-width: 900px) 100vw, 50vw" alt="Front elevation" loading="lazy"></button><figcaption><span>Front elevation</span><span>Nov 2025</span></figcaption></figure>
+        <figure><button type="button" data-full="assets/rear_elevation.jpg" aria-label="Enlarge rear elevation"><img src="assets/rear_elevation.jpg" srcset="assets/rear_elevation-1200.webp 1200w, assets/rear_elevation.jpg 2300w" sizes="(max-width: 900px) 100vw, 50vw" alt="Rear elevation" loading="lazy"></button><figcaption><span>Rear elevation</span><span>Nov 2025</span></figcaption></figure>
+      </div>
+      <p class="disclosure">The rotating model is a conceptual massing study, not a surveyed or construction-ready model. Front and rear are based on the elevation drawings. Side roof geometry and other unseen details are estimated. Square footages are taken from the plans. Final construction, materials and finishes may differ.</p>
+    </div>
+  </section>
+</main>
+<dialog class="lb" id="lightbox" aria-label="Enlarged drawing"><button type="button" id="lbClose">Close</button><img alt=""></dialog>
+
+<!-- MOBILE: touch-rotatable 3D model -->
+<section class="m-model" id="mModel" aria-label="Interactive 3D massing model">
+  <div class="label m-kicker">3D model</div>
+  <h2>The house in 3D.</h2>
+  <p class="lede"><span class="hint-mouse">Drag sideways</span><span class="hint-touch">Swipe sideways</span> to walk around the house.</p>
+  <div class="m-viewer" id="mViewer">
+    <img class="m-poster" id="mPoster" src="assets/mobile/intro-mobile-poster.jpg" alt="" aria-hidden="true" loading="lazy">
+  </div>
+  <div class="m-hint" id="mHint"><svg viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1"><path d="M1 6h20M5 2 1 6l4 4M17 2l4 4-4 4"/></svg><span><span class="hint-mouse">Drag to rotate</span><span class="hint-touch">Swipe to rotate</span></span></div>
+</section>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="ft-top"><div class="ft-word">310 Meadowcrest</div><div class="ft-meta"><span>310 Meadowcrest Drive</span><span>Plans dated November 20, 2025</span></div></div>
+    <div class="ft-bot"><span>© 2026 310 Meadowcrest</span><span>Renderings are conceptual. Final construction may differ.</span></div>
+  </div>
+</footer>
+<script>
+  /* plan tabs */
+  (function(){
+    const tabs=[...document.querySelectorAll('.tabs [role=tab]')];
+    function pick(t){ tabs.forEach(x=>{const on=x===t; x.setAttribute('aria-selected',on); x.tabIndex=on?0:-1; document.getElementById(x.getAttribute('aria-controls')).hidden=!on;}); }
+    tabs.forEach((t,i)=>{ t.addEventListener('click',()=>pick(t)); t.addEventListener('keydown',e=>{ if(e.key==='ArrowRight'||e.key==='ArrowLeft'){ const n=tabs[(i+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length]; pick(n); n.focus(); } }); });
+    /* lightbox for plans and elevations */
+    const lb=document.getElementById('lightbox'), img=lb.querySelector('img');
+    document.querySelectorAll('[data-full]').forEach(el=>el.addEventListener('click',()=>{ img.src=el.dataset.full; img.alt=(el.querySelector('img')||{}).alt||''; lb.showModal(); }));
+    document.getElementById('lbClose').addEventListener('click',()=>lb.close());
+    lb.addEventListener('click',e=>{ if(e.target===lb) lb.close(); });
+  })();
+</script>
+
+<script>
+  /* ---------------- desktop: scroll to rotate ---------------- */
+  (function(){
+    const mq=matchMedia('(max-width: 800px)');
+    const story=document.querySelector('.story');
+    const drawing=document.getElementById('drawingStage');
+    const model=document.getElementById('modelStage');
+    const badge=document.getElementById('disclaimer');
+    const progress=document.getElementById('progress');
+    const cue=document.getElementById('scrollCue');
+    const info=document.getElementById('infoFade');
+    const img=document.getElementById('frameA');
+    const mh=document.getElementById('masthead');
+    const darkEls=[story,document.getElementById('mModel'),document.querySelector('.footer')];
+    const degrees=document.getElementById('degrees');
+    const count=document.getElementById('frameCount');
+    const N=120;
+    const frames=Array.from({length:N},(_,i)=>`assets/frames/frame-${String(i).padStart(3,'0')}.webp`);
+    const clamp=(x,lo=0,hi=1)=>Math.max(lo,Math.min(hi,x));
+    const smooth=(t)=>{const x=clamp(t);return x*x*(3-2*x)};
+    let pending=false, preloaded=false, shown=-1;
+    const cache=[];
+    function preload(){ if(preloaded) return; preloaded=true;
+      frames.forEach((src,i)=>{const im=new Image(); im.decoding='async'; im.src=src; cache[i]=im;}); }
+    function render(){
+      pending=false;
+      if(mq.matches) return;
+      preload();
+      const span=Math.max(1,story.offsetHeight-window.innerHeight);
+      const p=clamp((window.scrollY-story.offsetTop)/span);
+      badge.style.opacity=(1-clamp((p-.80)/.06)).toFixed(3);
+      progress.style.opacity=clamp((p-.03)/.05).toFixed(3);
+      info.style.opacity=clamp((p-.82)/.08).toFixed(3);
+      cue.style.opacity=(1-clamp(p/.05)).toFixed(3);
+      mh.classList.toggle('on-dark', darkEls.some(el=>{const r=el.getBoundingClientRect(); return r.top<=70 && r.bottom>70;}));
+      const t=clamp((p-.04)/.76);
+      const i=Math.round(t*N)%N;               // snap to one sharp frame, never blend two
+      if(i!==shown){ img.src=frames[i]; shown=i; }
+      const deg=Math.round(t*360);
+      degrees.textContent=String(deg).padStart(3,'0')+'°';
+      count.textContent=String(i+1).padStart(3,'0')+' / '+N;
+    }
+    function onScroll(){if(!pending){pending=true;requestAnimationFrame(render)}}
+    addEventListener('scroll',onScroll,{passive:true});addEventListener('resize',onScroll);addEventListener('load',render);
+    render();
+  })();
+
+  /* ---------------- mobile: full-screen intro, plays once per page load ---------------- */
+  (function(){
+    if(!matchMedia('(max-width: 800px)').matches) return;
+    if('scrollRestoration' in history) history.scrollRestoration='manual';
+    scrollTo(0,0);
+    const root=document.documentElement, theme=document.querySelector('meta[name="theme-color"]');
+    const sec=document.getElementById('mIntro'), v=document.getElementById('mVideo');
+    root.classList.add('locked'); theme.content='#13121b';
+    const s=v.querySelector('source'); s.src=s.dataset.src; v.preload='auto'; v.load();
+    let finished=false, exited=false; const t0=performance.now();
+    const exit=()=>{ if(exited) return; exited=true; sec.classList.add('out'); root.classList.remove('locked'); theme.content='#fbfaf8'; setTimeout(()=>sec.remove(),1000); };
+    const finish=()=>{ if(finished) return; finished=true; sec.classList.add('done'); setTimeout(exit,1700); };
+    v.addEventListener('ended',finish);
+    sec.addEventListener('click',()=>{ if(performance.now()-t0>1500){ finish(); exit(); } });   // tap to skip after a moment
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches){ finish(); return; }
+    v.play().catch(()=>setTimeout(finish,600));   // autoplay blocked: show the still front view briefly
+    setTimeout(finish,8000);                         // safety net
+    const mh=document.getElementById('masthead');
+    addEventListener('scroll',()=>mh.classList.toggle('scrolled',scrollY>8),{passive:true});
+  })();
+</script>
+
+<!-- interactive model, phone + desktop (no outside libraries; loads only when you scroll near it) -->
+<script>
+  (function(){
+    
+    const host=document.getElementById('mViewer');
+    const load=src=>new Promise((ok,bad)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=bad;document.head.appendChild(s);});
+    const start=async()=>{
+      await load('assets/mobile/model-data.js'); await load('assets/mobile/viewer.js');
+      const v=window.MeadowcrestViewer(host, window.MEADOWCREST_MODEL, {onFirstTouch:()=>{document.getElementById('mHint').style.opacity=0;}});
+      if(v) document.getElementById('mPoster').style.opacity=0;
+    };
+    const io=new IntersectionObserver(([e])=>{ if(e.isIntersecting){ io.disconnect(); start().catch(err=>console.warn('3D viewer failed',err)); } },{rootMargin:'600px 0px'});
+    io.observe(host);
+  })();
+</script>
+</body>
+</html>
