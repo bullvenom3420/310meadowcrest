@@ -579,20 +579,10 @@
     const frames=Array.from({length:N},(_,i)=>`assets/frames/frame-${String(i).padStart(3,'0')}.webp`);
     const clamp=(x,lo=0,hi=1)=>Math.max(lo,Math.min(hi,x));
     let pending=false, shown=-1;
-    /* All frames are downloaded once (about 5 MB). As you scroll, the next few frames in the
-       direction you're going are decoded ahead of time off the main thread, so swapping to them
-       never stalls the page - scrolling back up included. */
-    const cache=[]; let started=false, dir=1, primed=new Set();
+    const cache=[]; let started=false;
     function start(){ if(started) return; started=true;
       frames.forEach((src,i)=>{const im=new Image(); im.decoding='async'; im.src=src; cache[i]=im;}); }
-    function prime(i){ const im=cache[i]; if(!im||primed.has(i)||!im.decode) return; primed.add(i); im.decode().catch(()=>primed.delete(i)); }
-    function show(i){
-      if(shown>=0){ const step=((i-shown+N+N/2)%N)-N/2; if(step) dir=Math.sign(step); }
-      img.src=frames[i];
-      for(const k of primed){ const d=((k-i)*dir+N)%N; if(d>10 && d<N-3) primed.delete(k); }   // let far frames go
-      for(let d=1; d<=8; d++) prime((i+dir*d+N)%N);
-      prime((i-dir+N)%N);
-    }
+    function show(i){ img.src=frames[i]; }
     function render(){
       pending=false;
       if(mq.matches) return;
