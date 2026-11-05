@@ -91,7 +91,7 @@
     .navigation{font-weight:500;letter-spacing:.18em}
     .masthead{background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,255,255,0))}
     /* desktop scroll: same night palette as the phone intro */
-    .story{height:270vh}
+    .story{height:420vh}
     .stage{background:radial-gradient(70% 62% at 50% 58%,#1d1b29 0%,#13121b 72%)}
     .story .drawing-stage{display:none}
     .model-stage{opacity:1}
@@ -248,6 +248,12 @@
     }
     @media(prefers-reduced-motion:reduce){.dog-tail,.dog-head,.cat-tail{animation:none}}
     @media(prefers-reduced-motion:reduce){.dd-grid img{transition:none}}
+    .m-skip{display:none}
+    @media(max-width:800px){
+      .m-skip{display:grid;place-items:center;position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:max(14px,env(safe-area-inset-right,0px));width:40px;height:40px;padding:0;border:1px solid rgba(236,235,242,.16);border-radius:50%;background:transparent;color:var(--night-muted);cursor:pointer;transition:color .2s,border-color .2s;-webkit-tap-highlight-color:transparent;z-index:2}
+      .m-skip svg{width:14px;height:14px}
+      .m-skip:active,.m-skip:focus-visible{color:var(--night-ink);border-color:rgba(236,235,242,.4);outline:none}
+    }
   </style>
 </head>
 <body id="top">
@@ -262,7 +268,7 @@
       <div class="drawing-footer">Original architectural elevation <span style="padding:0 14px">/</span> November 20, 2025</div>
     </div>
     <div class="model-stage" id="modelStage" aria-label="A 120-frame conceptual massing model rotating 360 degrees">
-      <img class="spin-image" id="frameA" src="assets/frames/frame-000.webp" alt="Conceptual three-dimensional massing model of 310 Meadowcrest" decoding="sync">
+      <img class="spin-image" id="frameA" src="assets/frames/frame-000.webp" alt="Conceptual three-dimensional massing model of 310 Meadowcrest" decoding="async" data-f="0">
       <svg class="spin-image pets pets-desk show" id="petsDesk" viewBox="0 0 1600 1040" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs>
   <clipPath id="petsWinD"><rect x="525" y="650" width="72" height="119"/></clipPath>
 </defs>
@@ -326,6 +332,7 @@
 
 <!-- MOBILE: one-shot animation on dark -->
 <section class="m-intro" id="mIntro" aria-label="Conceptual massing model of the home">
+  <button type="button" class="m-skip" id="mSkip" aria-label="Skip intro"><svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
   <div class="m-chip">Conceptual rendering</div>
   <div class="vid-wrap">
     <video id="mVideo" muted playsinline preload="none" poster="assets/mobile/intro-mobile-poster.jpg" aria-label="The conceptual massing model turns one full rotation">
@@ -531,11 +538,11 @@
 <section class="m-model" id="mModel" aria-label="Interactive 3D massing model">
   <div class="label m-kicker">3D model</div>
   <h2>The house in 3D.</h2>
-  <p class="lede"><span class="hint-mouse">Drag sideways</span><span class="hint-touch">Swipe sideways</span> to walk around the house.</p>
+  <p class="lede"><span class="hint-mouse">Drag sideways</span><span class="hint-touch">Swipe sideways</span> to walk around the house. <span class="hint-mouse">Click</span><span class="hint-touch">Tap</span> any spot to zoom in on it.</p>
   <div class="m-viewer" id="mViewer">
     <img width="1080" height="780" class="m-poster" id="mPoster" src="assets/mobile/intro-mobile-poster.jpg" alt="" aria-hidden="true" loading="lazy">
   </div>
-  <div class="m-hint" id="mHint"><svg viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1"><path d="M1 6h20M5 2 1 6l4 4M17 2l4 4-4 4"/></svg><span><span class="hint-mouse">Drag to rotate</span><span class="hint-touch">Swipe to rotate</span></span></div>
+  <div class="m-hint" id="mHint"><svg viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1"><path d="M1 6h20M5 2 1 6l4 4M17 2l4 4-4 4"/></svg><span><span class="hint-mouse">Drag to rotate · click to zoom</span><span class="hint-touch">Swipe to rotate · tap or pinch to zoom</span></span></div>
 </section>
 
 <footer class="footer">
@@ -579,10 +586,19 @@
     const frames=Array.from({length:N},(_,i)=>`assets/frames/frame-${String(i).padStart(3,'0')}.webp`);
     const clamp=(x,lo=0,hi=1)=>Math.max(lo,Math.min(hi,x));
     let pending=false, shown=-1;
-    const cache=[]; let started=false;
-    function start(){ if(started) return; started=true;
-      frames.forEach((src,i)=>{const im=new Image(); im.decoding='async'; im.src=src; cache[i]=im;}); }
-    function show(i){ img.src=frames[i]; }
+    /* Frames load in spin order, six at a time, and each one is decoded off the main thread before it
+       is ever put on screen. If the frame the scroll asks for isn't ready yet, the nearest ready frame
+       stands in, so the page never freezes waiting for a decode (the old stutter at the start and end). */
+    const ready=new Uint8Array(N), cache=[]; let started=false, want=0;
+    function start(){ if(started) return; started=true; ready[0]=1;
+      let next=1, live=0;
+      const pump=()=>{ while(live<6 && next<N){ const i=next++; live++;
+          const im=new Image(); im.decoding='async'; im.src=frames[i]; cache[i]=im;
+          const p=im.decode?im.decode():new Promise((ok,no)=>{im.onload=ok;im.onerror=no;});
+          p.then(()=>{ ready[i]=1; live--; if(i===want) show(want); pump(); },()=>{ live--; pump(); }); } };
+      pump(); }
+    function nearest(i){ if(ready[i]) return i; for(let d=1;d<N/2;d++){ const a=(i-d+N)%N, b=(i+d)%N; if(ready[a]) return a; if(ready[b]) return b; } return 0; }
+    function show(i){ want=i; const k=nearest(i); if(img.dataset.f!==String(k)){ img.src=frames[k]; img.dataset.f=String(k); } }
     function render(){
       pending=false;
       if(mq.matches) return;
@@ -621,10 +637,16 @@
     const exit=()=>{ if(exited) return; exited=true; sec.classList.add('out'); root.classList.remove('locked'); theme.content='#fbfaf8'; setTimeout(()=>sec.remove(),1000); };
     const finish=()=>{ if(finished) return; finished=true; sec.classList.add('done'); setTimeout(exit,1700); };
     v.addEventListener('ended',finish);
-    sec.addEventListener('click',()=>{ if(performance.now()-t0>1500){ finish(); exit(); } });   // tap to skip after a moment
+    sec.addEventListener('click',()=>{ if(performance.now()-t0>1500){ finish(); exit(); } });
+    document.getElementById('mSkip').addEventListener('click',e=>{ e.stopPropagation(); finish(); exit(); });   // quiet close button   // tap to skip after a moment
     if(matchMedia('(prefers-reduced-motion: reduce)').matches){ finish(); return; }
-    v.play().catch(()=>setTimeout(finish,600));   // autoplay blocked: show the still front view briefly
-    setTimeout(finish,8000);                         // safety net
+    let go=false; const play=()=>{ if(go||finished) return; go=true;
+      const p=v.play(); if(p&&p.catch) p.catch(()=>setTimeout(finish,600));   // autoplay blocked: show the still front view briefly
+    };
+    // start only once the whole clip is buffered (no mid-spin stalls); the poster is the exact first frame
+    if(v.readyState>=4) play(); else { v.addEventListener('canplaythrough',play,{once:true}); setTimeout(()=>{ if(v.readyState>=3) play(); },3500); }
+    setTimeout(()=>{ if(!go) finish(); },6500);       // very slow connection: skip to the still front view
+    setTimeout(finish,16000);                         // safety net
     const mh=document.getElementById('masthead');
     addEventListener('scroll',()=>mh.classList.toggle('scrolled',scrollY>8),{passive:true});
   })();

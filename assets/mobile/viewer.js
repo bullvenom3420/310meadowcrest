@@ -100,7 +100,41 @@
     }
 
     let angle = 0, vel = 0, auto = true, dragging = false, lastX = 0, lastT = 0, visible = true, raf = 0;
-    const view = lookAt([0, 9.5, 46], [0, 3.6, 0], [0, 1, 0]);
+    /* zoom: k = 1 shows the whole house; smaller k moves the camera closer. ox/oy/oz shift the aim point.
+       A tap or pinch aims at the spot on the house under your finger (found by casting a ray into the
+       house's bounding box) and the camera moves straight toward it, so that spot stays under your finger. */
+    let zoom = 1, zoomTo = 1, ox = 0, oy = 0, oz = 0, oxTo = 0, oyTo = 0, ozTo = 0, fovY = 30 * Math.PI / 180, aspNow = 1;
+    const ZMIN = 0.28, ZMAX = 1.15, TY = 3.6, DY = 5.9, DZ = 46, DL = Math.hypot(DY, DZ), UY = DZ / DL, UZ = -DY / DL;
+    const BOX = [[-10.3, 0, -10.8], [10.3, 10.4, 10.6]];               // the house's extents in model space
+    function viewMat() { const k = zoom, tx = ox, ty = TY + oy, tz = oz; return lookAt([tx, ty + DY * k, tz + DZ * k], [tx, ty, tz], [0, 1, 0]); }
+    const halfH = k => DL * k * Math.tan(fovY / 2);
+    function clampPan(k) {
+      if (k >= 1 - 1e-3) { oxTo = 0; oyTo = 0; ozTo = 0; return; }
+      const hh = halfH(k), hw = hh * aspNow;
+      // keep the aim point on the house: within its width and depth, no lower than the doorsills, no higher than the ridge
+      const mx = Math.max(0, 12.2 - 0.5 * hw); oxTo = Math.max(-mx, Math.min(mx, oxTo));
+      oyTo = Math.max(0.6 - TY, Math.min(Math.max(0.6 - TY, 10.4 - TY - 0.5 * hh), oyTo));
+      ozTo = Math.max(-11, Math.min(11, ozTo));
+    }
+    function hitPoint(nx, ny, k) {                                     // world point under canvas position nx, ny
+      const t = Math.tan(fovY / 2), T = [oxTo, TY + oyTo, ozTo], E = [T[0], T[1] + DY * k, T[2] + DZ * k];
+      const d = [nx * t * aspNow, -DY / DL + ny * t * UY, -DZ / DL + ny * t * UZ];   // forward + right*x + up*y
+      const c = Math.cos(angle), sn = Math.sin(angle);
+      const toM = v => [c * v[0] - sn * v[2], v[1], sn * v[0] + c * v[2]];      // world -> model (undo the turn)
+      const e = toM(E), dm = toM(d); let t0 = 0, t1 = Infinity;
+      for (let i = 0; i < 3; i++) {
+        if (Math.abs(dm[i]) < 1e-9) { if (e[i] < BOX[0][i] || e[i] > BOX[1][i]) { t1 = -1; break; } continue; }
+        let a = (BOX[0][i] - e[i]) / dm[i], b = (BOX[1][i] - e[i]) / dm[i]; if (a > b) [a, b] = [b, a];
+        t0 = Math.max(t0, a); t1 = Math.min(t1, b);
+      }
+      const tt = t0 <= t1 && t0 > 0 ? t0 : k * DL;                     // missed the house: use the aim-point depth
+      return [E[0] + tt * d[0], E[1] + tt * d[1], E[2] + tt * d[2]];
+    }
+    function zoomAt(z, nx, ny) {                                       // nx, ny: -1..1 across the canvas
+      const k0 = zoomTo, k1 = Math.max(ZMIN, Math.min(ZMAX, z)), f = 1 - k1 / k0, P = hitPoint(nx, ny, k0);
+      oxTo += (P[0] - oxTo) * f; oyTo += (P[1] - TY - oyTo) * f; ozTo += (P[2] - ozTo) * f;
+      zoomTo = k1; clampPan(k1); updBtns(); kick();
+    }
     function size() {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const w = Math.max(1, Math.round(host.clientWidth * dpr)), h = Math.max(1, Math.round(host.clientHeight * dpr));
@@ -111,9 +145,12 @@
     function attr(p, name, b, n) { const l = gl.getAttribLocation(p, name); gl.bindBuffer(gl.ARRAY_BUFFER, b); gl.enableVertexAttribArray(l); gl.vertexAttribPointer(l, n, gl.FLOAT, false, 0, 0); return l; }
     function draw() {
       const asp = size();
-      const proj = mat4persp((asp > 1.6 ? 21 : 30) * Math.PI / 180, asp, 1, 300);  // tighter framing on wide desktop viewers
+      fovY = (asp > 1.6 ? 21 : 30) * Math.PI / 180; aspNow = asp;   // tighter framing on wide desktop viewers
+      const proj = mat4persp(fovY, asp, 0.5, 300);
       const R = rotY(angle);
-      const vp = mul(proj, view), mvp = mul(vp, R);
+      zoom += (zoomTo - zoom) * 0.2; ox += (oxTo - ox) * 0.2; oy += (oyTo - oy) * 0.2; oz += (ozTo - oz) * 0.2;
+      if (Math.abs(zoomTo - zoom) < 1e-4 && Math.abs(oxTo - ox) < 1e-3 && Math.abs(oyTo - oy) < 1e-3 && Math.abs(ozTo - oz) < 1e-3) { zoom = zoomTo; ox = oxTo; oy = oyTo; oz = ozTo; }
+      const vp = mul(proj, viewMat()), mvp = mul(vp, R);
       gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
       // ground shadow (rotates with the house)
       gl.disable(gl.DEPTH_TEST); gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
@@ -134,26 +171,57 @@
     }
     function tick() {
       raf = 0;
-      if (!dragging) { if (auto) angle += 0.002975; else { angle += vel; vel *= 0.94; if (Math.abs(vel) < 1e-5) vel = 0; } }
+      if (!dragging) { if (auto) angle += 0.0017; else { angle += vel; vel *= 0.94; if (Math.abs(vel) < 1e-5) vel = 0; } }
       draw();
-      if (visible && (auto || dragging || vel || pets.ready)) raf = requestAnimationFrame(tick);
+      if (visible && (auto || dragging || vel || pets.ready || zoom !== zoomTo || ox !== oxTo || oy !== oyTo || oz !== ozTo)) raf = requestAnimationFrame(tick);
     }
     function kick() { if (!raf && visible) raf = requestAnimationFrame(tick); }
 
+    const ptrs = new Map(); let pinch0 = 0, zoom0 = 1, down = null, pinched = false;
+    function updBtns() { if (!zoomBtns) return; for (const [b, off] of [[zoomBtns.inBtn, zoomTo <= ZMIN + 1e-3], [zoomBtns.outBtn, zoomTo >= 1 - 1e-3]]) { b.disabled = off; b.style.opacity = off ? '.35' : '1'; b.style.cursor = off ? 'default' : 'pointer'; } }
+    const ndc = (x, y) => { const r = canvas.getBoundingClientRect(); return [((x - r.left) / r.width) * 2 - 1, 1 - ((y - r.top) / r.height) * 2]; };
+    const firstTouch = () => { if (auto) { auto = false; if (opts.onFirstTouch) opts.onFirstTouch(); } };
     canvas.addEventListener('pointerdown', e => {
-      dragging = true; lastX = e.clientX; lastT = performance.now(); vel = 0; canvas.style.cursor = 'grabbing';
-      if (auto) { auto = false; if (opts.onFirstTouch) opts.onFirstTouch(); }
+      ptrs.set(e.pointerId, [e.clientX, e.clientY]);
       try { canvas.setPointerCapture(e.pointerId); } catch (_) { }
+      firstTouch();
+      if (ptrs.size === 2) { const [p, q] = [...ptrs.values()]; pinch0 = Math.hypot(p[0] - q[0], p[1] - q[1]) || 1; zoom0 = zoomTo; dragging = false; pinched = true; down = null; }
+      else { dragging = true; lastX = e.clientX; lastT = performance.now(); vel = 0; canvas.style.cursor = 'grabbing'; down = [e.clientX, e.clientY, lastT]; pinched = false; }
       kick();
     });
     canvas.addEventListener('pointermove', e => {
+      if (!ptrs.has(e.pointerId)) return;
+      ptrs.set(e.pointerId, [e.clientX, e.clientY]);
+      if (ptrs.size === 2) { const [p, q] = [...ptrs.values()], [nx, ny] = ndc((p[0] + q[0]) / 2, (p[1] + q[1]) / 2);
+        zoomAt(zoom0 * pinch0 / (Math.hypot(p[0] - q[0], p[1] - q[1]) || 1), nx, ny); return; }
       if (!dragging) return;
       const now = performance.now(), dx = e.clientX - lastX;
       const d = dx / Math.max(200, host.clientWidth) * Math.PI * 1.6;
       angle += d; vel = d / Math.max(1, (now - lastT) / 16.7) ; lastX = e.clientX; lastT = now;
     });
-    const end = () => { dragging = false; canvas.style.cursor = 'grab'; kick(); };
+    const end = e => {
+      // a quick tap or click (no drag, no pinch) zooms in on that spot
+      if (e.type === 'pointerup' && down && !pinched && ptrs.size === 1 && Math.hypot(e.clientX - down[0], e.clientY - down[1]) < 8 && performance.now() - down[2] < 400) {
+        const [nx, ny] = ndc(e.clientX, e.clientY); vel = 0; zoomAt(zoomTo * 0.6, nx, ny); }
+      ptrs.delete(e.pointerId); down = null;
+      if (ptrs.size === 1) { const [p] = [...ptrs.values()]; lastX = p[0]; lastT = performance.now(); dragging = true; } else { dragging = false; canvas.style.cursor = 'grab'; }
+      kick();
+    };
     canvas.addEventListener('pointerup', end); canvas.addEventListener('pointercancel', end);
+    // trackpad pinch (and ctrl + wheel) zooms at the pointer; a plain wheel still scrolls the page
+    canvas.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); firstTouch(); const [nx, ny] = ndc(e.clientX, e.clientY); zoomAt(zoomTo * Math.exp(e.deltaY * 0.01), nx, ny); }, { passive: false });
+    // zoom buttons
+    let zoomBtns = null;
+    (function () {
+      const bar = document.createElement('div');
+      bar.style.cssText = 'position:absolute;right:max(14px,env(safe-area-inset-right,0px));bottom:14px;display:flex;flex-direction:column;gap:8px;z-index:2';
+      const mk = (label, txt, dz) => { const b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-label', label); b.textContent = txt;
+        b.style.cssText = 'width:44px;height:44px;border-radius:50%;border:1px solid rgba(245,239,232,.28);background:rgba(19,18,27,.55);color:#f5efe8;font:300 22px/1 Geist,system-ui,sans-serif;cursor:pointer;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)';
+        b.addEventListener('click', () => { firstTouch(); zoomAt(dz > 1 && zoomTo * dz >= 0.97 ? 1 : zoomTo * dz, 0, 0); }); bar.appendChild(b); return b; };
+      const inBtn = mk('Zoom in', '+', 0.65), outBtn = mk('Zoom out', '−', 1 / 0.65);
+      if (getComputedStyle(host).position === 'static') host.style.position = 'relative';
+      host.appendChild(bar); zoomBtns = { inBtn, outBtn }; outBtn.disabled = true; outBtn.style.opacity = '.35';
+    })();
     new IntersectionObserver(([en]) => { visible = en.isIntersecting; if (visible) kick(); }).observe(host);
     addEventListener('resize', () => { draw(); });
     draw(); kick();
