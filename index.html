@@ -28,7 +28,7 @@
     .masthead{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;justify-content:space-between;align-items:center;padding:27px clamp(19px,4.5vw,72px);pointer-events:none;background:linear-gradient(180deg,rgba(249,248,245,.96),rgba(249,248,245,0));}
     .brand,.navigation{pointer-events:auto}.brand{font-family:Georgia,'Times New Roman',serif;font-size:23px;letter-spacing:.1em;white-space:nowrap}.brand span{font-size:12px;vertical-align:5px;letter-spacing:.12em;margin:0 6px;color:#998d81}.navigation{display:flex;gap:28px;font-size:10px;letter-spacing:.22em;text-transform:uppercase;font-weight:600}.navigation a{transition:opacity .2s}.navigation a:hover{opacity:.5}
     /* ---------- desktop scroll story ---------- */
-    .story{height:300vh;position:relative}.stage{height:100svh;min-height:500px;position:sticky;top:0;overflow:hidden;display:grid;place-items:center;background:var(--cream)}
+    .story{height:300vh;position:relative;overflow-anchor:none}.stage{height:100svh;min-height:500px;position:sticky;top:0;overflow:hidden;display:grid;place-items:center;background:var(--cream)}
     .paper-pattern{position:absolute;inset:0;background-image:radial-gradient(#6f6b60 0.35px, transparent .45px);background-size:9px 9px;opacity:.045;pointer-events:none}
     .drawing-stage,.model-stage{position:absolute;inset:0;display:flex;justify-content:center;align-items:center;transition:none;will-change:opacity}
     .drawing-stage{z-index:3;opacity:1}.drawing-stage .illustration{width:min(91vw,1460px);object-fit:contain;max-height:75vh;filter:contrast(.98);mix-blend-mode:multiply}
@@ -578,15 +578,25 @@
     const N=120;
     const frames=Array.from({length:N},(_,i)=>`assets/frames/frame-${String(i).padStart(3,'0')}.webp`);
     const clamp=(x,lo=0,hi=1)=>Math.max(lo,Math.min(hi,x));
-    const smooth=(t)=>{const x=clamp(t);return x*x*(3-2*x)};
-    let pending=false, preloaded=false, shown=-1;
-    const cache=[];
-    function preload(){ if(preloaded) return; preloaded=true;
+    let pending=false, shown=-1;
+    /* All frames are downloaded once (about 5 MB). As you scroll, the next few frames in the
+       direction you're going are decoded ahead of time off the main thread, so swapping to them
+       never stalls the page - scrolling back up included. */
+    const cache=[]; let started=false, dir=1, primed=new Set();
+    function start(){ if(started) return; started=true;
       frames.forEach((src,i)=>{const im=new Image(); im.decoding='async'; im.src=src; cache[i]=im;}); }
+    function prime(i){ const im=cache[i]; if(!im||primed.has(i)||!im.decode) return; primed.add(i); im.decode().catch(()=>primed.delete(i)); }
+    function show(i){
+      if(shown>=0){ const step=((i-shown+N+N/2)%N)-N/2; if(step) dir=Math.sign(step); }
+      img.src=frames[i];
+      for(const k of primed){ const d=((k-i)*dir+N)%N; if(d>10 && d<N-3) primed.delete(k); }   // let far frames go
+      for(let d=1; d<=8; d++) prime((i+dir*d+N)%N);
+      prime((i-dir+N)%N);
+    }
     function render(){
       pending=false;
       if(mq.matches) return;
-      preload();
+      start();
       const span=Math.max(1,story.offsetHeight-window.innerHeight);
       const p=clamp((window.scrollY-story.offsetTop)/span);
       badge.style.opacity=(1-clamp((p-.80)/.06)).toFixed(3);
@@ -594,9 +604,10 @@
       info.style.opacity=clamp((p-.82)/.08).toFixed(3);
       cue.style.opacity=(1-clamp(p/.05)).toFixed(3);
       mh.classList.toggle('on-dark', darkEls.some(el=>{const r=el.getBoundingClientRect(); return r.top<=70 && r.bottom>70;}));
+      const r=story.getBoundingClientRect(); if(r.bottom<0||r.top>innerHeight) return;   // story off screen: nothing to draw
       const t=clamp((p-.04)/.76);
       const i=Math.round(t*N)%N;               // snap to one sharp frame, never blend two
-      if(i!==shown){ img.src=frames[i]; shown=i; petsDesk.classList.toggle('show', i===0); }
+      if(i!==shown){ show(i); shown=i; petsDesk.classList.toggle('show', i===0); }
       const deg=Math.round(t*360);
       degrees.textContent=String(deg).padStart(3,'0')+'°';
       count.textContent=String(i+1).padStart(3,'0')+' / '+N;
@@ -646,11 +657,17 @@
 <script>
 /* in-page links: re-aim after the smooth scroll in case anything above the target grew while scrolling */
 (function(){
+  /* the moment you wheel, touch or press a key, the link's glide stops and the page is yours again */
+  let userMoved=false, gliding=false;
+  const mark=()=>{ userMoved=true; if(gliding){ gliding=false; scrollTo({top:scrollY,behavior:'instant'}); } };
+  ['wheel','touchstart','keydown'].forEach(t=>addEventListener(t,mark,{passive:true}));
+  addEventListener('pointerdown',e=>{ if(!e.target.closest('a[href^="#"]')) mark(); },{passive:true});
+  addEventListener('scrollend',()=>{ gliding=false; });
   function settle(el,tries){
     let done=false;
-    const check=()=>{ if(done) return; done=true;
+    const check=()=>{ if(done) return; done=true; if(userMoved) return;
       const off=el.getBoundingClientRect().top - (parseFloat(getComputedStyle(el).scrollMarginTop)||0);
-      if(Math.abs(off)>4 && tries>0){ scrollBy({top:off,behavior:'smooth'}); settle(el,tries-1); }
+      if(Math.abs(off)>4 && tries>0){ gliding=true; scrollBy({top:off,behavior:'smooth'}); settle(el,tries-1); }
     };
     addEventListener('scrollend',check,{once:true});
     setTimeout(check,1400);
@@ -663,7 +680,7 @@
     el.querySelectorAll('img[loading="lazy"]').forEach(i=>i.loading='eager');
     el.scrollIntoView({behavior:'smooth',block:'start'});
     history.pushState(null,'','#'+id);
-    settle(el,3);
+    userMoved=false; gliding=true; settle(el,3);
   });
 })();
 </script>
