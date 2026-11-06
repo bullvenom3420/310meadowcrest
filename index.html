@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="light">
-  <meta name="theme-color" content="#f9f8f5">
+  <meta name="theme-color" content="#eceef3">
   <meta name="description" content="310 Meadowcrest Drive, Richardson, TX 75080. A new Tudor-style home in the Canyon Creek neighborhood of Richardson with six bedrooms, five and a half baths, two living rooms, a chef's kitchen, a pool and covered outdoor living. Richardson ISD: Prairie Creek Elementary, Richardson North Junior High and J.J. Pearce High School.">
   <title>310 Meadowcrest Drive, Richardson, TX 75080</title>
   <link rel="canonical" href="https://310meadowcrest.com/">
@@ -254,6 +254,22 @@
       .m-skip svg{width:14px;height:14px}
       .m-skip:active,.m-skip:focus-visible{color:var(--night-ink);border-color:rgba(236,235,242,.4);outline:none}
     }
+    /* Meadowcrest: cool mist page to match the night-blue scheme; the residence band is deep indigo */
+    :root{--stone:#eceef3;--paper:#f7f8fb;--ink:#171925;--ink-2:#474a5c;--muted:#7f8296;--rule:#d6d9e3;--bronze:#5d6383}
+    .masthead{background:linear-gradient(180deg,rgba(236,238,243,.96),rgba(236,238,243,0))}
+    .m-hero{background:var(--stone);padding:clamp(64px,7vw,104px) 0 0}
+    .m-hero img{mix-blend-mode:multiply}
+    .dd-grid figure{background:#e2e5ed}
+    dialog.lb img{background:var(--paper)}
+    #overview{background:#22253a;color:#ecebf2;--ink:#ecebf2;--ink-2:#c9c9d8;--muted:#a3a3ba;--rule:#3a3e58;--bronze:#a9b0d6}
+    #overview.block{padding-bottom:clamp(80px,9vw,128px)}
+    #overview + .m-hero{border-top:0}
+    .masthead.on-band{background:linear-gradient(180deg,rgba(34,37,58,.94),rgba(34,37,58,0));color:#ecebf2}.masthead.on-band .brand span{color:#a3a3ba}
+    @media(max-width:800px){
+      .masthead{background:rgba(236,238,243,.86)}
+      .masthead.on-band{background:rgba(34,37,58,.92);border-bottom-color:#3a3e58}.masthead.on-band .navigation a{color:#c9c9d8}.masthead.on-dark{background:rgba(19,18,27,.9)}
+      .m-hero{padding:28px 0 0}#overview.block{padding-top:calc(88px + env(safe-area-inset-top,0px))}
+    }
   </style>
 </head>
 <body id="top">
@@ -396,14 +412,8 @@
   <p>A home in the making</p>
 </section>
 
-<!-- HOME SCREEN (phone + desktop): front elevation, description directly beneath -->
-<section class="m-hero" aria-label="Front elevation">
-  <img src="assets/front_elevation-1200.webp" srcset="assets/front_elevation-1200.webp 1200w, assets/front_elevation.jpg 2300w" sizes="(max-width: 800px) 100vw, 1240px" width="1200" height="586" alt="Front elevation drawing of 310 Meadowcrest">
-  <div class="m-hero-cap"><span>Front elevation</span><span>November 2025</span></div>
-</section>
-
 <main>
-  <!-- OVERVIEW -->
+  <!-- OVERVIEW: night-blue band -->
   <section class="block" id="overview" aria-labelledby="ov-title">
     <div class="wrap">
       <div class="ov-grid">
@@ -430,6 +440,13 @@
       <ul class="features" aria-label="Highlights"><li>Chef's kitchen</li><li>Pool</li><li>Covered outdoor living</li><li>Two-story foyer, 20′6″</li><li>Primary suite on the main floor</li><li>Study and media room</li></ul>
     </div>
   </section>
+
+  <!-- FRONT ELEVATION -->
+<section class="m-hero" aria-label="Front elevation">
+  <img src="assets/front_elevation-1200.webp" srcset="assets/front_elevation-1200.webp 1200w, assets/front_elevation.jpg 2300w" sizes="(max-width: 800px) 100vw, 1240px" width="1200" height="586" alt="Front elevation drawing of 310 Meadowcrest">
+  <div class="m-hero-cap"><span>Front elevation</span><span>November 2025</span></div>
+</section>
+
 
   <!-- LOCATION AND SCHOOLS -->
   <section class="block" id="location" aria-labelledby="loc-title">
@@ -634,7 +651,7 @@
     root.classList.add('locked'); theme.content='#13121b';
     const s=v.querySelector('source'); s.src=s.dataset.src; v.preload='auto'; v.load();
     let finished=false, exited=false; const t0=performance.now();
-    const exit=()=>{ if(exited) return; exited=true; sec.classList.add('out'); root.classList.remove('locked'); theme.content='#fbfaf8'; setTimeout(()=>sec.remove(),1000); };
+    const exit=()=>{ if(exited) return; exited=true; sec.classList.add('out'); root.classList.remove('locked'); theme.content='#eceef3'; setTimeout(()=>sec.remove(),1000); };
     const finish=()=>{ if(finished) return; finished=true; sec.classList.add('done'); setTimeout(exit,1700); };
     v.addEventListener('ended',finish);
     sec.addEventListener('click',()=>{ if(performance.now()-t0>1500){ finish(); exit(); } });
@@ -696,6 +713,12 @@
     userMoved=false; gliding=true; settle(el,3);
   });
 })();
+</script>
+<script>
+  /* masthead turns night-blue over the residence band (phone + desktop) */
+  (function(){ const mh=document.getElementById('masthead'), band=document.getElementById('overview');
+    const f=()=>{ const r=band.getBoundingClientRect(), y=mh.offsetHeight*.6; mh.classList.toggle('on-band', r.top<=y && r.bottom>y); };
+    addEventListener('scroll',f,{passive:true}); addEventListener('resize',f); f(); })();
 </script>
 </body>
 </html>
